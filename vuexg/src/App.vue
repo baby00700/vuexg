@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
+    <el-checkbox v-model="modo">备选项</el-checkbox>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data: function () {
+    return {modo: false}
+  }
 }
 </script>
 

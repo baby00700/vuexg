@@ -1,5 +1,5 @@
 {
-  "name": "vuexg",
+  "name": "vueele",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "zhaihao",
@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "element-ui": "^1.4.7",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
