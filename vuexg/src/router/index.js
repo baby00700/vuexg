@@ -12,29 +12,44 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/xiaoxi',
+      path: '/dist/xiaoxi',
       name: 'xiaoxi',
-      component: xiaoxi
+      component: xiaoxi,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/daiban',
+      path: '/dist/daiban',
       name: 'daiban',
-      component: daiban
+      component: daiban,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/zhuye',
+      path: '/dist/zhuye',
       name: 'zhuye',
-      component: zhuye
+      component: zhuye,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/lianxiren',
+      path: '/dist/lianxiren',
       name: 'lianxiren',
-      component: lianxiren
+      component: lianxiren,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/wode',
+      path: '/dist/wode',
       name: 'wode',
-      component: wode
+      component: wode,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })

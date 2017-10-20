@@ -1,7 +1,7 @@
 <template>
   <div class="bar">
     <ul id="barname">
-      <li v-for="(item, $index) in barnames" @click="topage(item, $index)">
+      <li v-for="(item, $index) in barnames" @click="topage($index)">
           <div class="barcon">
             <div class="bartb">
               <img :src='item.imgpath1' :alt="item.name"  v-show="item.showpath1">
@@ -20,8 +20,8 @@
     data () {
       return {
         barnames: [
-          {name: '消息', value: 'xiaoxi', imgpath1: '../../static/img/xiaoxi1.png', imgpath2: '../../static/img/xiaoxi2.png', showpath1: true, showpath2: false},
-          {name: '待办', value: 'daiban', imgpath1: '../../static/img/daiban1.png', imgpath2: '../../static/img/daiban2.png', showpath1: true, showpath2: false},
+          {name: '消息', value: 'xiaoxi', imgpath1: '../static/img/xiaoxi1.png', imgpath2: '../../static/img/xiaoxi2.png', showpath1: true, showpath2: false},
+          {name: '待办', value: 'daiban', imgpath1: '../static/img/daiban1.png', imgpath2: '../../static/img/daiban2.png', showpath1: true, showpath2: false},
           {name: '主页', value: 'zhuye', imgpath1: '../../static/img/zhuye1.png', imgpath2: '../../static/img/zhuye2.png', showpath1: true, showpath2: false},
           {name: '联系人', value: 'lianxiren', imgpath1: '../../static/img/lianxiren1.png', imgpath2: '../../static/img/lianxiren2.png', showpath1: true, showpath2: false},
           {name: '我的', value: 'wode', imgpath1: '../../static/img/wode1.png', imgpath2: '../../static/img/wode2.png', showpath1: true, showpath2: false}
@@ -30,7 +30,7 @@
         DangQianPath: ''
       }
     },
-    created: function () {
+    mounted: function () {
       this.DangQianPath = this.$route.path
       this.DangQianPath = this.DangQianPath.split('/')
       var pathindex = 2
@@ -40,13 +40,12 @@
         }
       }
       console.log(pathindex)
-      this.ChangeColor(pathindex)
+      this.topage(pathindex)
     },
     methods: {
-      topage: function (item, index) {
-        this.$router.push(this.barnames[index].value)
-        console.log(item)
-        console.log(index)
+      topage: function (index) {
+        this.$router.push('/dist/' + this.barnames[index].value)    // 默认进入主页
+        // console.log(index)
         this.$el.childNodes[0].childNodes[index].style.color = '#38adff'
         this.barnames[index].showpath1 = false
         this.barnames[index].showpath2 = true
@@ -57,18 +56,21 @@
             this.$el.childNodes[0].childNodes[i].style.color = '#666666'
           }
         }
-      },
-      ChangeColor: function (index) {
-//        this.$el.childNodes[0].childNodes[index].style.color = '#38adff'
-//        this.barnames[index].showpath1 = false
-//        this.barnames[index].showpath2 = true
-//        for (var i = 0; i < this.barnames.length; i++) {
-//          if (i !== index) {
-//            this.barnames[i].showpath1 = true
-//            this.barnames[i].showpath2 = false
-//            this.$el.childNodes[0].childNodes[i].style.color = '#666666'
-//          }
-//        }
+      }
+    },
+    watch: {
+      '$route' (to, from) {                    // 控制动画方向
+        // console.log(to.path + '**************')
+        var pathass = to.path
+        pathass = pathass.split('/')
+        pathass = pathass[1]
+        for (var i = 0; i < this.barcons.length; i++) {
+          if (this.barcons[i] === pathass) {
+           // console.log(i + '//**//')
+            this.topage(i)
+            break
+          }
+        }
       }
     }
   }

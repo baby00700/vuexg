@@ -35,14 +35,14 @@ export default {
   },
   watch: {
     '$route' (to, from) {                    // 控制动画方向
-      console.log(to.path + from.path)
+     // console.log(to.path + from.path)
       var newval = to.path
       var oldval = from.path
       newval = newval.split('/')
       newval = newval[1]
       oldval = oldval.split('/')
       oldval = oldval[1]
-      console.log(newval + oldval)
+     // console.log(newval + oldval)
       var toindex
       var fromindex
       for (var i = 0; i < this.barcons.length; i++) {
@@ -56,7 +56,7 @@ export default {
         }
       }
       var fx = toindex - fromindex
-      console.log(fx)
+     // console.log(fx)
       if (fx < 0) {
         this.transitionName = 'slide-right'
       } else {
