@@ -15,13 +15,13 @@
       <div class="pwdinput">
         <div class="pwdicon"></div>
         <div class="inputwrap">
-          <input type="password" class="pwd" placeholder="请输入密码" @blur="validatepwd()"  :change="isshowbut()" v-model="pwd" maxlength="20" />
+          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" />
         </div>
       </div>
     </div>
-    <div class="loginbut"  v-show="isbutture" @click="loginin()">登录</div>
-    <div class="loginbut1"  v-show="isbutfalse">登录</div>
-    <div class="loginbut2 "  v-show="isbut2show"> <i class="el-icon-loading"></i></div>
+    <div class="loginbut"  v-if="isbutture" @click="loginin()">登录</div>
+    <div class="loginbut1"  v-if="isbutfalse">登录</div>
+    <div class="loginbut2 "  v-if="isbut2show"> <i class="el-icon-loading"></i></div>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
       ksh: '',
       pwd: '',
       isbutture: false,
-      isbutfalse: false,
+      isbutfalse: true,
       isbut2show: false
     }
   },
@@ -45,14 +45,14 @@ export default {
         this.ksh = ''
       }
     },
-    validatepwd: function () {
-      console.log(this.pwd)
-      var reg = /^[0-9a-zA-Z]+$/
-      if (!reg.test(this.pwd)) {
-        alert('密码格式不正确')
-        this.pwd = ''
-      }
-    },
+//    validatepwd: function () {
+//      console.log(this.pwd)
+//      var reg = /^[0-9a-zA-Z]+$/
+//      if (!reg.test(this.pwd)) {
+//        alert('密码格式不正确')
+//        this.pwd = ''
+//      }
+//    },
     isshowbut: function () {
       if (this.pwd.length >= 6 && this.ksh.length >= 1) {
         this.isbutture = true
@@ -63,10 +63,17 @@ export default {
       }
     },
     loginin: function () {
-      console.log('login....')
-      this.isbutfalse = false
-      this.isbutture = false
-      this.isbut2show = true
+      var reg = /^[0-9a-zA-Z]+$/
+      if (!reg.test(this.pwd)) {
+        alert('密码格式不正确')
+        this.pwd = ''
+      } else {
+        console.log('login....')
+        this.isbutture = false
+      }
+
+      // this.isbutture = false
+      // this.isbut2show = true
     }
   }
 }
