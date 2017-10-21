@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <loginview class="loginview" v-show="isloginshow"></loginview>
     <transition :name="transitionName">
       <router-view class="child-view"/>
     </transition>
@@ -10,20 +11,23 @@
 
 <script>
 import bar from '@/components/bar'
+import login from '@/components/login'
 export default {
   name: 'app',
   data () {
     return {
       DangQianPath: '',
       transitionName: 'slide-left',
-      barcons: ['xiaoxi', 'daiban', 'zhuye', 'lianxiren', 'wode']
+      barcons: ['xiaoxi', 'daiban', 'zhuye', 'lianxiren', 'wode'],
+      isloginshow: true
     }
   },
   created: function () {
     this.getPath()
   },
   components: {
-    barview: bar
+    barview: bar,
+    loginview: login
   },
   mounted () {
   },
@@ -85,6 +89,13 @@ export default {
   margin-top: 60px;
 }
 
+
+.loginview{
+  position:fixed;
+  width:100%;
+  height:300%;
+  top:0px;
+}
   .child-view {
     position: absolute;
     left: 0;
@@ -94,6 +105,8 @@ export default {
     transition: all .5s cubic-bezier(.55,0,.1,1);
     background-color:red;
   }
+
+
   .slide-left-enter, .slide-right-leave-active {
     opacity: 0;
     -webkit-transform: translate(30px, 0);

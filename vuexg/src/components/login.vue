@@ -1,18 +1,205 @@
-<template>
+<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <div class="login">
+    <div class="header">
+        <div class="logo"></div>
+        <div class="sysname">学工智能服务平台</div>
+    </div>
+    <div class="contenter">
+      <div class="kshinput">
+        <div class="kshicon"></div>
+        <div class="inputwrap">
+          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh"/>
+        </div>
 
+      </div>
+      <div class="pwdinput">
+        <div class="pwdicon"></div>
+        <div class="inputwrap">
+          <input type="password" class="pwd" placeholder="请输入密码" @blur="validatepwd()"  :change="isshowbut()" v-model="pwd" maxlength="20" />
+        </div>
+      </div>
+    </div>
+    <div class="loginbut"  v-show="isbutture" @click="loginin()">登录</div>
+    <div class="loginbut1"  v-show="isbutfalse">登录</div>
+    <div class="loginbut2 "  v-show="isbut2show"> <i class="el-icon-loading"></i></div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'login',
+  data () {
+    return {
+      ksh: '',
+      pwd: '',
+      isbutture: false,
+      isbutfalse: false,
+      isbut2show: false
+    }
+  },
   methods: {
+    validateksh: function () {
+      console.log(this.ksh)
+      if (!isNaN(this.ksh) === false) {
+        alert('请输入正确的考生号')
+        this.ksh = ''
+      }
+    },
+    validatepwd: function () {
+      console.log(this.pwd)
+      var reg = /^[0-9a-zA-Z]+$/
+      if (!reg.test(this.pwd)) {
+        alert('密码格式不正确')
+        this.pwd = ''
+      }
+    },
+    isshowbut: function () {
+      if (this.pwd.length >= 6 && this.ksh.length >= 1) {
+        this.isbutture = true
+        this.isbutfalse = false
+      } else {
+        this.isbutture = false
+        this.isbutfalse = true
+      }
+    },
+    loginin: function () {
+      console.log('login....')
+      this.isbutfalse = false
+      this.isbutture = false
+      this.isbut2show = true
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.login{
+  height:100%;
+  width:100%;
+  background-color:#fff;
+  z-index:222;
+  color:#2c3e50;
+}
+  .header{
+    height:30%;
+    background-color:rgb(40,123,226);
+    position:relative;
+  }
+  .logo{
+    width:96px;
+    height:96px;
+    /*border:1px solid red;*/
+    position:absolute;
+    top:calc(50% - 74px);
+    left:calc(50% - 48px);
+    background-image:url('../../static/img/logo.png');
+    background-size:100% 100%;
+  }
 
+  .sysname{
+    width:100%;
+    text-align:center;
+    font-weight:999;
+    font-size:16px;
+    color:#fff;
+    position:absolute;
+    top:calc(50% + 35px);
+  }
+
+  .contenter{
+    width:84%;
+    height:100px;
+    position:relative;
+    /*background-color: red;*/
+    top:6%;
+    left:8%;
+    border-radius:8px;
+    border:1px solid #ccc;
+    overflow: hidden;
+  }
+  .kshinput{
+    width:100%;
+    height:50%;
+    border-bottom:1px solid #ccc;
+    position:relative;
+    /*background-color:mistyrose;*/
+  }
+  .pwdinput{
+    width:100%;
+    height:50%;
+    position:relative;
+    /*background-color:greenyellow;*/
+  }
+
+  .loginbut{
+    width:84%;
+    height:40px;
+    position:relative;
+    left:8%;
+    top:60px;
+    background-color:rgb(40,123,226);
+    color:#fff;
+    font-weight: 900;
+    line-height: 40px;
+    border-radius:20px;
+  }
+
+.loginbut1{
+  width:84%;
+  height:40px;
+  position:relative;
+  left:8%;
+  top:60px;
+  background-color:#eee;
+  color:#fff;
+  font-weight: 900;
+  line-height: 40px;
+  border-radius:20px;
+}
+
+.loginbut2{
+  width:84%;
+  height:40px;
+  position:relative;
+  left:8%;
+  top:60px;
+  background-color:rgb(40,123,226);;
+  color:#fff;
+  font-weight: 900;
+  line-height: 40px;
+  border-radius:20px;
+}
+  .kshicon,
+  .pwdicon{
+    height:100%;
+    width:50px;
+    float:left;
+
+  }
+
+  .kshicon{
+    background-image:url('../../static/img/ksh.png');
+    background-size:45% 45%;
+    background-repeat: no-repeat;
+    background-position:center;
+  }
+  .pwdicon{
+    background-image:url('../../static/img/pwd.png');
+    background-size:45% 45%;
+    background-repeat: no-repeat;
+    background-position:center;
+  }
+  .ksh,.pwd{
+    border:0;
+    height:100%;
+    width:100%;
+    font-size:14px;
+  }
+ .inputwrap{
+   width:calc(100% - 50px);
+   height:100%;
+   background-color:red;
+   float:left;
+ }
 </style>
