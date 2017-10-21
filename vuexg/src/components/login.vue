@@ -1,4 +1,4 @@
-<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<template>
   <div class="login">
     <div class="header">
         <div class="logo"></div>
@@ -8,20 +8,21 @@
       <div class="kshinput">
         <div class="kshicon"></div>
         <div class="inputwrap">
-          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh"/>
+          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh" :disabled="isdisable"/>
         </div>
 
       </div>
       <div class="pwdinput">
         <div class="pwdicon"></div>
         <div class="inputwrap">
-          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" />
+          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable"/>
         </div>
       </div>
     </div>
-    <div class="loginbut"  v-if="isbutture" @click="loginin()">登录</div>
+    <div class="loginbut"  v-if="isbutture" @click="loginin()" :class="{ buthide: buthide }">登录</div>
     <div class="loginbut1"  v-if="isbutfalse">登录</div>
     <div class="loginbut2 "  v-if="isbut2show"> <i class="el-icon-loading"></i></div>
+    <div class="changepwd"><p>修改密码？</p></div>
   </div>
 </template>
 
@@ -34,7 +35,9 @@ export default {
       pwd: '',
       isbutture: false,
       isbutfalse: true,
-      isbut2show: false
+      isbut2show: false,
+      buthide: false,
+      isdisable: false
     }
   },
   methods: {
@@ -60,6 +63,8 @@ export default {
       } else {
         this.isbutture = false
         this.isbutfalse = true
+        this.buthide = false
+        this.isbut2show = false
       }
     },
     loginin: function () {
@@ -69,11 +74,13 @@ export default {
         this.pwd = ''
       } else {
         console.log('login....')
+        this.buthide = true
+        this.isbut2show = true
+        this.isdisable = true
         this.isbutture = false
+        console.log(this.isbutture)
+        // 登录方法 https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login
       }
-
-      // this.isbutture = false
-      // this.isbut2show = true
     }
   }
 }
@@ -151,7 +158,9 @@ export default {
     line-height: 40px;
     border-radius:20px;
   }
-
+.buthide{
+  display:none;
+}
 .loginbut1{
   width:84%;
   height:40px;
@@ -209,4 +218,22 @@ export default {
    background-color:red;
    float:left;
  }
+
+  .changepwd{
+    width:100%;
+    height:25px;
+    font-size:12px;
+    color:rgb(40,123,226);
+    font-weight: 400;
+    position:relative;
+    top:65px;
+    left:0px;
+    /*border:1px solid red;*/
+    line-height:25px;
+  }
+
+  .changepwd p{
+    position:absolute;
+    right:9%;
+  }
 </style>
