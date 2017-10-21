@@ -22,7 +22,7 @@
     <div class="loginbut"  v-if="isbutture" @click="loginin()" :class="{ buthide: buthide }">登录</div>
     <div class="loginbut1"  v-if="isbutfalse">登录</div>
     <div class="loginbut2 "  v-if="isbut2show"> <i class="el-icon-loading"></i></div>
-    <div class="changepwd"><p>修改密码？</p></div>
+    <div class="changepwd" v-if="ischangepwdshow"><p>修改密码？</p></div>
   </div>
 </template>
 
@@ -37,7 +37,8 @@ export default {
       isbutfalse: true,
       isbut2show: false,
       buthide: false,
-      isdisable: false
+      isdisable: false,
+      ischangepwdshow: true
     }
   },
   methods: {
