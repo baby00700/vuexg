@@ -20,11 +20,11 @@
     data () {
       return {
         barnames: [
-          {name: '消息', value: 'xiaoxi', imgpath1: '../static/img/xiaoxi1.png', imgpath2: '../../static/img/xiaoxi2.png', showpath1: true, showpath2: false},
-          {name: '待办', value: 'daiban', imgpath1: '../static/img/daiban1.png', imgpath2: '../../static/img/daiban2.png', showpath1: true, showpath2: false},
-          {name: '主页', value: 'zhuye', imgpath1: '../../static/img/zhuye1.png', imgpath2: '../../static/img/zhuye2.png', showpath1: true, showpath2: false},
-          {name: '联系人', value: 'lianxiren', imgpath1: '../../static/img/lianxiren1.png', imgpath2: '../../static/img/lianxiren2.png', showpath1: true, showpath2: false},
-          {name: '我的', value: 'wode', imgpath1: '../../static/img/wode1.png', imgpath2: '../../static/img/wode2.png', showpath1: true, showpath2: false}
+          {name: '消息', value: 'xiaoxi', imgpath1: '../static/img/xiaoxi1.png', imgpath2: '../static/img/xiaoxi2.png', showpath1: true, showpath2: false},
+          {name: '待办', value: 'daiban', imgpath1: '../static/img/daiban1.png', imgpath2: '../static/img/daiban2.png', showpath1: true, showpath2: false},
+          {name: '主页', value: 'zhuye', imgpath1: '../static/img/zhuye1.png', imgpath2: '../static/img/zhuye2.png', showpath1: true, showpath2: false},
+          {name: '联系人', value: 'lianxiren', imgpath1: '../static/img/lianxiren1.png', imgpath2: '../static/img/lianxiren2.png', showpath1: true, showpath2: false},
+          {name: '我的', value: 'wode', imgpath1: '../static/img/wode1.png', imgpath2: '../static/img/wode2.png', showpath1: true, showpath2: false}
         ],
         barcons: ['xiaoxi', 'daiban', 'zhuye', 'lianxiren', 'wode'],
         DangQianPath: ''
