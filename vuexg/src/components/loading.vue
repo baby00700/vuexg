@@ -4,6 +4,8 @@
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
+
+    <div class="tip">正在注销...</div>
   </div>
 </template>
 
@@ -69,5 +71,13 @@
         transform: scale(1.0);
         -webkit-transform: scale(1.0);
       }
+  }
+
+  .tip{
+    width:100%;
+    height:25px;
+    position:fixed;
+    top:calc(50% + 50px);
+    display:none;
   }
 </style>

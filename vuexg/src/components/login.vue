@@ -1,5 +1,8 @@
 <template>
   <div class="login">
+    <transition name="fade">
+      <changepwdview v-if="ischangepwdviewshow" class="changepwdview" @changepedhide="hidechangepwd"></changepwdview>
+    </transition>
     <div class="header">
         <div class="logo"></div>
         <div class="sysname">学工智能服务平台</div>
@@ -8,27 +11,29 @@
       <div class="kshinput">
         <div class="kshicon"></div>
         <div class="inputwrap">
-          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh" :disabled="isdisable" autocomplete="off" />
+          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh" :disabled="isdisable" auto-complete="off" />
         </div>
 
       </div>
       <div class="pwdinput">
         <div class="pwdicon"></div>
         <div class="inputwrap">
-          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable" autocomplete="off" />
+          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable" auto-complete="off" />
         </div>
       </div>
     </div>
     <div class="loginbut"  v-if="isbutture" @click="loginin()" :class="{ buthide: buthide }">登录</div>
     <div class="loginbut1"  v-if="isbutfalse">登录</div>
     <div class="loginbut2 "  v-if="isbut2show"> <i class="el-icon-loading"></i></div>
-    <div class="changepwd" v-if="ischangepwdshow"><p>修改密码？</p></div>
+    <div class="changepwd" v-if="ischangepwdshow" @click="showchangepwd"><p>修改密码？</p></div>
   </div>
 </template>
 
 <script>
 import vue from 'vue'
 import resource from 'vue-resource'
+import changepwd from '@/components/changepwd'
+
 vue.use(resource)
 export default {
   name: 'login',
@@ -41,7 +46,8 @@ export default {
       isbut2show: false,
       buthide: false,
       isdisable: false,
-      ischangepwdshow: true
+      ischangepwdshow: false,
+      ischangepwdviewshow: false
     }
   },
   methods: {
@@ -109,7 +115,16 @@ export default {
             alert(res)
           })
       }
+    },
+    showchangepwd: function () {
+      this.ischangepwdviewshow = true
+    },
+    hidechangepwd: function () {
+      this.ischangepwdviewshow = false
     }
+  },
+  components: {
+    changepwdview: changepwd
   }
 }
 </script>
@@ -213,6 +228,16 @@ export default {
   font-weight: 900;
   line-height: 40px;
   border-radius:20px;
+}
+
+.changepwdview{
+  width:100%;
+  height:100%;
+  z-index:333;
+  background-color:#fff;
+  position:fixed;
+  top:0px;
+  left:0px;
 }
   .kshicon,
   .pwdicon{

@@ -6,7 +6,7 @@ lianxiren
 
 <script>
   export default {
-    name: 'login',
+    name: 'lianxiren',
     mounted: function () {
       console.log('zy')
       this.$emit('mountedcomplete')

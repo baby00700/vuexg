@@ -92,7 +92,7 @@
   .bar{
     width:100%;
     height:60px;
-    background-color:red;
+    background-color:#fff;
     position: fixed;
     bottom:0px;
     /*-webkit-box-shadow: 0 -1px 10px 2px rgba(0,0,0,0.2);*/

@@ -6,10 +6,10 @@ zhuye
 
 <script>
   export default {
-    name: 'login',
+    name: 'zhuye',
     mounted: function () {
       console.log('zy')
-      this.$emit('loginsuccess')
+      this.$emit('mountedcomplete')
     },
     methods: {
     }

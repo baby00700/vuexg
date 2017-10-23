@@ -1,8 +1,8 @@
 <template>
   <div id="app">
+    <loadingview class="loadingview" v-if="isloadingshow" @mountedcomplete="loadinghide()"></loadingview>
     <transition name="fade">
-     <loadingview class="loadingview" v-show="isloadingshow" @mountedcomplete="loadinghide"></loadingview>
-     <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess"></loginview>
+     <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess()"></loginview>
     </transition>
       <transition :name="transitionName">
       <router-view class="child-view"/>
@@ -28,6 +28,7 @@ export default {
   },
   created: function () {
     this.getPath()
+   // this.$router.push('/dist/login/changepwd')
    // console.log(window.localStorage)
     if ('loginsuccess' in window.localStorage) {
       var loginsuccess
@@ -44,6 +45,7 @@ export default {
     loadingview: loading
   },
   mounted () {
+    this.isloadingshow = false
   },
   methods: {
     getPath: function () {
@@ -52,9 +54,12 @@ export default {
     },
     logintosucess: function () {
       this.isloginshow = false
+      this.$router.push('/dist/zhuye')
     },
     loadinghide: function () {
       this.isloadingshow = false
+      console.log(this.isloadingshow)
+      alert('11')
     }
   },
   watch: {
@@ -137,7 +142,7 @@ export default {
     width: 100%;
     height: 100%;
     transition: all .5s cubic-bezier(.55,0,.1,1);
-    background-color:red;
+    background-color:green;
   }
 
   /*页面加载动画*/
