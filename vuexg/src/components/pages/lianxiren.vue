@@ -7,6 +7,10 @@ lianxiren
 <script>
   export default {
     name: 'login',
+    mounted: function () {
+      console.log('zy')
+      this.$emit('mountedcomplete')
+    },
     methods: {
     }
   }

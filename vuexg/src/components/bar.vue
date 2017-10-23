@@ -33,17 +33,19 @@
     mounted: function () {
       this.DangQianPath = this.$route.path
       this.DangQianPath = this.DangQianPath.split('/')
+    //  console.log(this.DangQianPath)
       var pathindex = 2
       for (var i = 0; i < this.barcons.length; i++) {
-        if (this.barcons[i] === this.DangQianPath) {
+        if (this.barcons[i] === this.DangQianPath[2]) {
           pathindex = i
         }
       }
-      console.log(pathindex)
+     // console.log(pathindex)
       this.topage(pathindex)
     },
     methods: {
       topage: function (index) {
+        // console.log(window.history)
         this.$router.push('/dist/' + this.barnames[index].value)    // 默认进入主页
         // console.log(index)
         this.$el.childNodes[0].childNodes[index].style.color = '#38adff'
@@ -62,11 +64,15 @@
       '$route' (to, from) {                    // 控制动画方向
         // console.log(to.path + '**************')
         var pathass = to.path
+        if (pathass === '/dist/' || pathass === '/') {
+          this.$router.push('/dist/zhuye')
+        }
         pathass = pathass.split('/')
-        pathass = pathass[1]
+        pathass = pathass[2]
+       // console.log(pathass)
         for (var i = 0; i < this.barcons.length; i++) {
           if (this.barcons[i] === pathass) {
-           // console.log(i + '//**//')
+         //   console.log(i + '//**//')
             this.topage(i)
             break
           }

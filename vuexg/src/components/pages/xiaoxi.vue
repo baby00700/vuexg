@@ -7,6 +7,10 @@
 <script>
   export default {
     name: 'xiaoxi',
+    mounted: function () {
+      console.log('zy')
+      this.$emit('mountedcomplete')
+    },
     methods: {
     }
   }

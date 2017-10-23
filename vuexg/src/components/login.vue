@@ -8,14 +8,14 @@
       <div class="kshinput">
         <div class="kshicon"></div>
         <div class="inputwrap">
-          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh" :disabled="isdisable"/>
+          <input type="text" class="ksh" placeholder="请输入考生号" @change="validateksh()" v-model="ksh" :disabled="isdisable" autocomplete="off" />
         </div>
 
       </div>
       <div class="pwdinput">
         <div class="pwdicon"></div>
         <div class="inputwrap">
-          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable"/>
+          <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable" autocomplete="off" />
         </div>
       </div>
     </div>
@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import vue from 'vue'
+import resource from 'vue-resource'
+vue.use(resource)
 export default {
   name: 'login',
   data () {
@@ -81,6 +84,30 @@ export default {
         this.isbutture = false
         console.log(this.isbutture)
         // 登录方法 https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login
+        var url = 'https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login'
+        this.$http.post(url, {emulateJSoN: true})
+          .then(function (data) {
+            // console.log(data)
+            // console.log(data.body.data.success)
+            if (data.body.data.success === 'true') {
+              // 初始化页面
+              console.log(data.body.data.success)
+              this.isbutture = false
+              this.isbutfalse = true
+              this.isbut2show = false
+              this.buthide = false
+              this.isdisable = false
+              this.ischangepwdshow = true
+              window.localStorage.setItem('loginsuccess', 'true')
+              this.$emit('loginsuccess')
+            } else {
+              // window.location.reload(true)
+            }
+          }, function (data) {
+            alert(data)
+          }).catch(function (res) {
+            alert(res)
+          })
       }
     }
   }
@@ -102,12 +129,12 @@ export default {
     position:relative;
   }
   .logo{
-    width:96px;
-    height:96px;
+    width:90px;
+    height:90px;
     /*border:1px solid red;*/
     position:absolute;
-    top:calc(50% - 74px);
-    left:calc(50% - 48px);
+    top:calc(50% - 59px);
+    left:calc(50% - 45px);
     background-image:url('../../static/img/logo.png');
     background-size:100% 100%;
   }
@@ -119,7 +146,7 @@ export default {
     font-size:16px;
     color:#fff;
     position:absolute;
-    top:calc(50% + 35px);
+    top:calc(50% + 39px);
   }
 
   .contenter{
