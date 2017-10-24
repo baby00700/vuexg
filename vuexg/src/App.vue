@@ -7,7 +7,7 @@
       <transition :name="transitionName">
       <router-view class="child-view"/>
     </transition>
-    <barview></barview>
+    <barview v-show="isbarshow" class="barview"></barview>
   </div>
 </template>
 
@@ -23,7 +23,8 @@ export default {
       transitionName: 'slide-left',
       barcons: ['xiaoxi', 'daiban', 'zhuye', 'lianxiren', 'wode'],
       isloginshow: true,
-      isloadingshow: false
+      isloadingshow: false,
+      isbarshow: true
     }
   },
   created: function () {
@@ -61,6 +62,9 @@ export default {
       this.isloadingshow = false
       console.log(this.isloadingshow)
       alert('11')
+    },
+    hidebar: function () {
+      this.isbarshow = false
     }
   },
   watch: {
@@ -162,7 +166,6 @@ export default {
   .spinner {
     width: 60px;
     height: 60px;
-
     position: relative;
     margin: 100px auto;
   }
@@ -176,7 +179,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-
     -webkit-animation: bounce 2.0s infinite ease-in-out;
     animation: bounce 2.0s infinite ease-in-out;
   }
@@ -199,5 +201,10 @@ export default {
         transform: scale(1.0);
         -webkit-transform: scale(1.0);
       }
+  }
+
+  .barview{
+    /*z-index:0;*/
+    /*border:1px solid red;*/
   }
 </style>

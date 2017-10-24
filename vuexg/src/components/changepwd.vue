@@ -1,6 +1,6 @@
 <template>
   <div class="changepwd">
-    <loadingview v-show="isshowloading"></loadingview>
+    <loadingview v-show="isshowloading" class="loadingview"></loadingview>
     <div class="pwd">
       <label for="oldpwdinput" class="pwdlabel">旧密码</label>
       <input type="password" id="oldpwdinput" class="pwdinput" placeholder="请输入原密码" v-model="oldpwd" @change="validatepwd" >
@@ -63,9 +63,7 @@
               if (data.body.data.success === 'true') {
                 this.$emit('changepedhide')
                 // this.isloadingshow = false
-                setTimeout(function () {
-                  this.isshowloading = false
-                }, 2000)
+                this.isshowloading = false
                 window.localStorage.setItem('loginsuccess', 'false')
                 location.reload(true)
               }
@@ -110,7 +108,7 @@
         }
       },
       offchangepwd: function () {
-        this.$emit('changepedhide')
+        this.$emit('changepwdhide')
       }
     }
   }
@@ -125,7 +123,6 @@
     position:fixed;
     top:0px;
     left:0px;
-    z-index:999;
   }
   .pwd{
     /*border:1px solid red;*/
@@ -189,5 +186,13 @@
     top:200px;
     left:3%;
     font-size:16px;
+  }
+  .loadingview{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0px;
+    left:0px;
+    z-index:999;
   }
 </style>

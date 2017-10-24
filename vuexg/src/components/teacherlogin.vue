@@ -1,8 +1,5 @@
 <template>
   <div class="login">
-    <transition name="fade">
-      <changepwdview v-if="ischangepwdviewshow" class="changepwdview" @changepedhide="hidechangepwd"></changepwdview>
-    </transition>
     <div class="header">
       <div class="logo"></div>
       <div class="sysname">学工智能服务平台</div>
@@ -60,14 +57,6 @@
           this.ksh = ''
         }
       },
-//    validatepwd: function () {
-//      console.log(this.pwd)
-//      var reg = /^[0-9a-zA-Z]+$/
-//      if (!reg.test(this.pwd)) {
-//        alert('密码格式不正确')
-//        this.pwd = ''
-//      }
-//    },
       isshowbut: function () {
         if (this.pwd.length >= 6 && this.ksh.length >= 1) {
           this.isbutture = true
@@ -173,7 +162,6 @@
     width:84%;
     height:100px;
     position:relative;
-    /*background-color: red;*/
     top:6%;
     left:8%;
     border-radius:8px;

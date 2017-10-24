@@ -63,16 +63,6 @@ export default {
     this.$emit('mountedcomplete')
   },
   methods: {
-    loginout: function () {
-      window.localStorage.setItem('loginsuccess', 'false')
-      location.reload(true)
-    },
-    showchangepwd: function () {
-      this.ischangepwdviewshow = true
-    },
-    hidechangepwd: function () {
-      this.ischangepwdviewshow = false
-    }
   },
   components: {
     loadingview: loading,
@@ -84,7 +74,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.wode{
 
+}
 
   .selfinfo{
     width:100%;
@@ -92,7 +84,7 @@ export default {
     background-color:#38adff;
     position:absolute;
     top:0px;
-    z-index:1;
+
   }
   .touxiang{
     width:64px;
@@ -100,8 +92,6 @@ export default {
     position: absolute;
     top:10px;
     left:20px;
-    background-color:#fff;
-    z-index:3;
     border-radius:40px;
     border:2px solid #fff;
     overflow: hidden;
@@ -151,13 +141,11 @@ export default {
     /*width:100%;*/
     /*background-color:red;*/
   /*}*/
-  .content{
-    z-index:999;
-  }
+
   .studentinfo{
     width:100%;
     height:100%;
     position:fixed;
-    z-index:999;
+
   }
 </style>

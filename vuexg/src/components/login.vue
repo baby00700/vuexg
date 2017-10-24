@@ -146,7 +146,7 @@ export default {
   height:100%;
   width:100%;
   background-color:#fff;
-  z-index:222;
+  z-index:999;
   color:#2c3e50;
 }
   .header{

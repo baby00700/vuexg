@@ -33,14 +33,14 @@
     mounted: function () {
       this.DangQianPath = this.$route.path
       this.DangQianPath = this.DangQianPath.split('/')
-    //  console.log(this.DangQianPath)
+      //  console.log(this.DangQianPath)
       var pathindex = 2
       for (var i = 0; i < this.barcons.length; i++) {
         if (this.barcons[i] === this.DangQianPath[2]) {
           pathindex = i
         }
       }
-     // console.log(pathindex)
+      // console.log(pathindex)
       this.topage(pathindex)
     },
     methods: {
@@ -97,6 +97,7 @@
     bottom:0px;
     /*-webkit-box-shadow: 0 -1px 10px 2px rgba(0,0,0,0.2);*/
     border-top:1px solid #eee;
+    z-index:1;
   }
   li{
     width:20%;

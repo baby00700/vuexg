@@ -1,7 +1,7 @@
 <template>
   <div class="studentinfo">
     <transition name="fade">
-      <changepwdview v-if="ischangepwdviewshow" class="changepwdview" @changepedhide="hidechangepwd"></changepwdview>
+      <changepwdview v-show="ischangepwdviewshow" class="changepwdview" @changepwdhide="hidechangepwd"></changepwdview>
     </transition>
     <div class="baseinfo">
       <div class="baseline">
@@ -55,7 +55,7 @@
         <div class="con">学生</div>
       </div>
     </div>
-    <div class="changepwd">
+    <div class="changepwd" @click="showchangepwd">
       <div class="baseline">
         <div class="tubiao">
         </div>
@@ -72,11 +72,12 @@
 
 <script>
 import changepwd from '@/components/changepwd'
+
 export default {
   name: 'studentinfo',
   data () {
     return {
-      ischangepwdviewshow: true
+      ischangepwdviewshow: false
     }
   },
   mounted: function () {
@@ -84,6 +85,16 @@ export default {
   },
   props: ['selfinfo'],
   methods: {
+    loginout: function () {
+      window.localStorage.setItem('loginsuccess', 'false')
+      location.reload(true)
+    },
+    showchangepwd: function () {
+      this.ischangepwdviewshow = true
+    },
+    hidechangepwd: function () {
+      this.ischangepwdviewshow = false
+    }
   },
   watch: {
   },
