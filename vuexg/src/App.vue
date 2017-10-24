@@ -2,7 +2,7 @@
   <div id="app">
     <loadingview class="loadingview" v-if="isloadingshow" @mountedcomplete="loadinghide()"></loadingview>
     <transition name="fade">
-     <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess()"></loginview>
+     <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess"></loginview>
     </transition>
       <transition :name="transitionName">
       <router-view class="child-view"/>
@@ -52,8 +52,9 @@ export default {
       this.DangQianPath = this.$route.path
      // console.log(this.DangQianPath)
     },
-    logintosucess: function () {
+    logintosucess: function (logininfo) {
       this.isloginshow = false
+      console.log(logininfo)
       this.$router.push('/dist/zhuye')
     },
     loadinghide: function () {

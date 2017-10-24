@@ -1,6 +1,9 @@
 <template>
   <div class="login">
     <transition name="fade">
+    <teacherloginview class="teacherview" @teacherloginsuccess="teacherloginsuccess" v-if="isteacherloginviewshow" v-on:hideteacherselfview="hideteacherview"></teacherloginview>
+    </transition>
+     <transition name="fade">
       <changepwdview v-if="ischangepwdviewshow" class="changepwdview" @changepedhide="hidechangepwd"></changepwdview>
     </transition>
     <div class="header">
@@ -21,11 +24,13 @@
           <input type="password" class="pwd" placeholder="请输入密码"   :change="isshowbut()" v-model="pwd" maxlength="20" :disabled="isdisable" auto-complete="off" />
         </div>
       </div>
+      <div class="changetoteacher" @click="showteacherview">--教师登录--</div>
     </div>
     <div class="loginbut"  v-if="isbutture" @click="loginin()" :class="{ buthide: buthide }">登录</div>
     <div class="loginbut1"  v-if="isbutfalse">登录</div>
     <div class="loginbut2 "  v-if="isbut2show"> <i class="el-icon-loading"></i></div>
     <div class="changepwd" v-if="ischangepwdshow" @click="showchangepwd"><p>修改密码？</p></div>
+
   </div>
 </template>
 
@@ -33,8 +38,10 @@
 import vue from 'vue'
 import resource from 'vue-resource'
 import changepwd from '@/components/changepwd'
+import teacherlogin from '@/components/teacherlogin'
 
 vue.use(resource)
+
 export default {
   name: 'login',
   data () {
@@ -47,7 +54,8 @@ export default {
       buthide: false,
       isdisable: false,
       ischangepwdshow: false,
-      ischangepwdviewshow: false
+      ischangepwdviewshow: false,
+      isteacherloginviewshow: false
     }
   },
   methods: {
@@ -58,14 +66,6 @@ export default {
         this.ksh = ''
       }
     },
-//    validatepwd: function () {
-//      console.log(this.pwd)
-//      var reg = /^[0-9a-zA-Z]+$/
-//      if (!reg.test(this.pwd)) {
-//        alert('密码格式不正确')
-//        this.pwd = ''
-//      }
-//    },
     isshowbut: function () {
       if (this.pwd.length >= 6 && this.ksh.length >= 1) {
         this.isbutture = true
@@ -90,6 +90,7 @@ export default {
         this.isbutture = false
         console.log(this.isbutture)
         // 登录方法 https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login
+        // 登录方法 https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login
         var url = 'https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login'
         this.$http.post(url, {emulateJSoN: true})
           .then(function (data) {
@@ -105,7 +106,7 @@ export default {
               this.isdisable = false
               this.ischangepwdshow = true
               window.localStorage.setItem('loginsuccess', 'true')
-              this.$emit('loginsuccess')
+              this.$emit('loginsuccess', 'student')
             } else {
               // window.location.reload(true)
             }
@@ -121,10 +122,20 @@ export default {
     },
     hidechangepwd: function () {
       this.ischangepwdviewshow = false
+    },
+    teacherloginsuccess: function () {
+      this.$emit('loginsuccess', 'teacher')
+    },
+    showteacherview: function () {
+      this.isteacherloginviewshow = true
+    },
+    hideteacherview: function () {
+      this.isteacherloginviewshow = false
     }
   },
   components: {
-    changepwdview: changepwd
+    changepwdview: changepwd,
+    teacherloginview: teacherlogin
   }
 }
 </script>
@@ -157,7 +168,7 @@ export default {
   .sysname{
     width:100%;
     text-align:center;
-    font-weight:999;
+    font-weight:900;
     font-size:16px;
     color:#fff;
     position:absolute;
@@ -268,7 +279,7 @@ export default {
  .inputwrap{
    width:calc(100% - 50px);
    height:100%;
-   background-color:red;
+   /*background-color:red;*/
    float:left;
  }
 
@@ -288,5 +299,23 @@ export default {
   .changepwd p{
     position:absolute;
     right:9%;
+  }
+
+  .changetoteacher{
+    position: fixed;
+    bottom:20px;
+    left:0px;
+    color:rgb(40,123,226);
+    width:100%;
+    text-align: center;
+    z-index:0;
+  }
+  .teacherview{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0px;
+    left:0px;
+    z-index:999;
   }
 </style>

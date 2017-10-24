@@ -1,19 +1,25 @@
 <template>
   <div class="login">
-zhuye
+    <div class="header">
+      <lunboview></lunboview>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'zhuye',
-    mounted: function () {
-      console.log('zy')
-      this.$emit('mountedcomplete')
-    },
-    methods: {
-    }
+import lunbo from '@/components/lunbo'
+export default {
+  name: 'zhuye',
+  mounted: function () {
+    console.log('zy')
+    this.$emit('mountedcomplete')
+  },
+  methods: {
+  },
+  components: {
+    lunboview: lunbo
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

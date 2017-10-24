@@ -125,6 +125,7 @@
     position:fixed;
     top:0px;
     left:0px;
+    z-index:999;
   }
   .pwd{
     /*border:1px solid red;*/
