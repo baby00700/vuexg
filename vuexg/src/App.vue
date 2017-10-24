@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import bar from '@/components/bar'
 import login from '@/components/login'
 import loading from '@/components/loading'
@@ -61,7 +62,7 @@ export default {
     loadinghide: function () {
       this.isloadingshow = false
       console.log(this.isloadingshow)
-      alert('11')
+      alert($)
     },
     hidebar: function () {
       this.isbarshow = false
