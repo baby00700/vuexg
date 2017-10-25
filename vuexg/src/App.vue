@@ -110,6 +110,7 @@ export default {
   *{
     margin:0px;
     padding:0px;
+    -webkit-tap-highlight-color:rgba(255,0,0,0);
   }
   /* 视图动画*/
   .fade-enter-active, .fade-leave-active {
@@ -125,6 +126,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  -webkit-tap-highlight-color:rgba(255,0,0,0);
 }
 
 
@@ -148,7 +150,7 @@ export default {
     width: 100%;
     height: 100%;
     transition: all .5s cubic-bezier(.55,0,.1,1);
-    background-color:green;
+    background-color:#ecedf1;
   }
 
   /*页面加载动画*/

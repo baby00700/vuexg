@@ -1,6 +1,5 @@
 <template>
   <div class="wode">
-    <loadingview v-show="isloadingshow" class="loading"></loadingview>
     <div class="selfinfo">
       <div class="touxiang"></div>
       <div class="infolist">
@@ -39,7 +38,7 @@ export default {
         {key: '工号', value: '20170101002'}
       ],
       isloadingshow: false,
-      isstudentinfoshow: true
+      isstudentinfoshow: false
     }
   },
   created: function () {
@@ -50,7 +49,11 @@ export default {
       console.log(data.body.data)
       var selinfo = data.body.data.selfinfos
       this.infoitems = selinfo
-      this.isloadingshow = false
+      if (data.body.data.type === 'student') {
+        this.isstudentinfoshow = true
+      } else {
+        this.isstudentinfoshow = false
+      }
       console.log(selinfo)
     }, function (data) {
       alert(data)
@@ -84,6 +87,7 @@ export default {
     background-color:#38adff;
     position:fixed;
     top:0px;
+    z-index: 0;
 
   }
   .touxiang{
