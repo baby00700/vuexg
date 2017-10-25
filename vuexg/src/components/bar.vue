@@ -1,6 +1,7 @@
 <template>
   <div class="bar">
     <ul id="barname">
+
       <li v-for="(item, $index) in barnames" @click="topage($index)">
           <div class="barcon">
             <div class="bartb">
@@ -10,6 +11,7 @@
             {{item.name}}
           </div>
       </li>
+
     </ul>
   </div>
 </template>

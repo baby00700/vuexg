@@ -1,8 +1,23 @@
 <template>
   <div class="studentinfo">
-    <transition name="fade">
+    <transition  name="custom-classes-transition"
+                 enter-active-class="animated bounceInRight"
+                 leave-active-class="animated bounceOutRight">
       <changepwdview v-show="ischangepwdviewshow" class="changepwdview" @changepwdhide="hidechangepwd"></changepwdview>
     </transition>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      size="small"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+     </span>
+    </el-dialog>
+
     <div class="baseinfo">
       <div class="baseline">
         <div class="tubiao">
@@ -65,19 +80,21 @@
         <div class="con">学生</div>
       </div>
     </div>
-    <div class="loginout">退出登录</div>
+    <div class="loginout" @click="loginout">退出登录</div>
 
   </div>
 </template>
 
 <script>
 import changepwd from '@/components/changepwd'
+// import { Loading } from 'element-ui'
 
 export default {
   name: 'studentinfo',
   data () {
     return {
-      ischangepwdviewshow: false
+      ischangepwdviewshow: false,
+      dialogVisible: false
     }
   },
   mounted: function () {
@@ -86,14 +103,26 @@ export default {
   props: ['selfinfo'],
   methods: {
     loginout: function () {
-      window.localStorage.setItem('loginsuccess', 'false')
-      location.reload(true)
+      this.dialogVisible = true
+     // setTimeout(function () {
+       // let loadingInstance1 = Loading.service({fullscreen: true, customClass: 'loading'})
+       // loadingInstance1.close()
+       // window.localStorage.clear()
+        // location.reload(true)
+    //  }, 3000)
     },
     showchangepwd: function () {
       this.ischangepwdviewshow = true
     },
     hidechangepwd: function () {
       this.ischangepwdviewshow = false
+    },
+    handleClose (done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   },
   watch: {
@@ -183,5 +212,7 @@ export default {
     left:0px;
     z-index:999;
   }
-
+  .loading{
+    background-color:#fff;
+  }
 </style>

@@ -8,7 +8,7 @@
     </transition>
     <div class="header">
         <div class="logo"></div>
-        <div class="sysname">学工智能服务平台</div>
+        <div class="sysname">学工智能服务平台-学生登录入口</div>
     </div>
     <div class="contenter">
       <div class="kshinput">

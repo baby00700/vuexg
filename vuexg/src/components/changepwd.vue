@@ -1,20 +1,24 @@
 <template>
   <div class="changepwd">
-    <loadingview v-show="isshowloading" class="loadingview"></loadingview>
     <div class="pwd">
-      <label for="oldpwdinput" class="pwdlabel">旧密码</label>
-      <input type="password" id="oldpwdinput" class="pwdinput" placeholder="请输入原密码" v-model="oldpwd" @change="validatepwd" >
+      <label for="oldpwdinput" class="pwdlabel">身份证号</label>
+      <input type="text" id="oldpwdinput" class="pwdinput" placeholder="请输入身份证号" v-model="oldpwd" @change="validatepwd" >
     </div>
     <div class="pwd">
       <label for="newpwdinput" class="pwdlabel">新密码</label>
-      <input type="text" id="newpwdinput" class="pwdinput" placeholder="请输入新密码" v-model="newpwd" @change="validatenewpwd">
+      <input type="password" id="newpwdinput" class="pwdinput" placeholder="请输入新密码" v-model="newpwd" @change="validatenewpwd">
     </div>
     <div class="pwd">
       <label for="confnewpwdinput" class="pwdlabel">确认密码</label>
-      <input type="text" id="confnewpwdinput" class="pwdinput" placeholder="请再次输入新密码" v-model="confnewpwd" @change="validateconfnewpwd">
+      <input type="password" id="confnewpwdinput" class="pwdinput" placeholder="请再次输入新密码" v-model="confnewpwd" @change="validateconfnewpwd">
     </div>
-    <div class="tip">密码由6-20位英文或数字组成</div>
-    <el-button type="primary" class="but" @click="changepwd()" v-if="isbut0show">确认</el-button>
+    <div class="tip">{{tip}}</div>
+    <el-button
+      type="primary"
+      @click="changepwd"
+      class="but" v-if="isbut0show" :disabled="isdisable">
+      提交
+    </el-button>
     <el-button type="primary" class="but1" @click="offchangepwd()" v-if="isbut0show">返回</el-button>
     <el-button type="primary" :disabled="true" class="but0"  v-if="isbut1show">提交中...</el-button>
   </div>
@@ -23,92 +27,106 @@
 <script>
   import vue from 'vue'
   import resource from 'vue-resource'
-  import loading from '@/components/loading'
+  import { Loading } from 'element-ui'
+
   vue.use(resource)
 
   export default {
     name: 'changepwd',
     data () {
       return {
-        isshowloading: true,
         oldpwd: '',
         newpwd: '',
         confnewpwd: '',
         isoldpwdok: false,
         isnewpwdok: false,
-        isconfpwdok: false,
         iseqpwd: false,
         isbut0show: true,
-        isbut1show: false
+        isbut1show: false,
+        isdisable: true,
+        isallok: false,
+        tip: '密码由6-20位英文或数字组成'
       }
     },
     mounted: function () {
-      this.isshowloading = false
     },
-    components: {
-      loadingview: loading
+    watch: {
+      confnewpwd: function (newval, oldval) {
+        this.validateconfnewpwd()
+      },
+      oldpwd: function (newval, oldval) {
+        this.validatepwd()
+      },
+      newpwd: function (newval, oldval) {
+        this.validatenewpwd()
+      }
     },
     methods: {
       changepwd: function () {
-        console.log(this.$data)
-        if (this.isoldpwdok === true && this.isnewpwdok === true && this.isconfpwdok === true && this.iseqpwd === true) {
-          this.isshowloading = true
+        if (this.isoldpwdok === true && this.isnewpwdok === true && this.iseqpwd === true) {
+          let loadingInstance1 = Loading.service({ fullscreen: true })
           this.isbut0show = false
           this.isbut1show = true
-          // 要判断是否为空 http://www.easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/changepwd
+          console.log(this.$data)
           var url = 'http://www.easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/changepwd'
           this.$http.post(url, {emulateJSoN: true})
             .then(function (data) {
-              console.log(data)
-              if (data.body.data.success === 'true') {
-                this.$emit('changepedhide')
-                // this.isloadingshow = false
-                this.isshowloading = false
-                window.localStorage.setItem('loginsuccess', 'false')
+              this.$emit('changepedhide')
+              setTimeout(function () {
+                loadingInstance1.close()
+                window.localStorage.clear()
                 location.reload(true)
-              }
+              }, 3000)
             })
         }
       },
       validatepwd: function () {
-        console.log(this.oldpwd)
-        var reg = /^[0-9a-zA-Z]+$/
-        if (!reg.test(this.oldpwd) || this.oldpwd.length < 6) {
-          alert('密码格式不正确')
-          this.oldpwd = ''
+        var reg = /^[0-9]+$/
+        if (!reg.test(this.oldpwd)) {
+          this.tip = '身份证号码格式不正确'
+          this.isdisable = true
         } else {
           this.isoldpwdok = true
+          this.tip = '请输入新密码'
         }
       },
       validatenewpwd: function () {
         console.log(this.newpwd)
         var reg = /^[0-9a-zA-Z]+$/
         if (!reg.test(this.newpwd) || this.newpwd.length < 6) {
-          alert('密码格式不正确')
-          this.newpwd = ''
+          this.tip = '密码格式不正确'
+          this.isdisable = true
         } else {
           this.isnewpwdok = true
+          this.tip = '密码由6-20位英文或数字组成'
+          if (this.newpwd === this.confnewpwd) {
+            this.iseqpwd = true
+            this.tip = '两次输入的密码一致'
+            this.isdisable = false
+          } else {
+            this.tip = '两次输入的密码不一致'
+            this.iseqpwd = false
+            this.isdisable = true
+          }
         }
       },
       validateconfnewpwd: function () {
         console.log(this.confnewpwd)
-        var reg = /^[0-9a-zA-Z]+$/
-        if (!reg.test(this.confnewpwd) || this.confnewpwd.length < 6) {
-          alert('密码格式不正确')
-          this.confnewpwd = ''
+        if (this.newpwd === this.confnewpwd) {
+          this.iseqpwd = true
+          this.tip = '两次输入的密码一致'
+          this.isdisable = false
         } else {
-          this.isconfpwdok = true
-          if (this.newpwd === this.confnewpwd) {
-            this.iseqpwd = true
-          } else {
-            alert('两次输入的密码不一致')
-            this.confnewpwd = ''
-            this.iseqpwd = false
-          }
+          this.tip = '两次输入的密码不一致'
+          this.iseqpwd = false
+          this.isdisable = true
         }
       },
       offchangepwd: function () {
         this.$emit('changepwdhide')
+      },
+      openFullScreen () {
+        this.fullscreenLoading = true
       }
     }
   }

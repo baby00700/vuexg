@@ -82,7 +82,7 @@ export default {
     width:100%;
     height:90px;
     background-color:#38adff;
-    position:absolute;
+    position:fixed;
     top:0px;
 
   }
