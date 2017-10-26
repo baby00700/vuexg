@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <loadingview class="loadingview" v-if="isloadingshow" @mountedcomplete="loadinghide()"></loadingview>
     <transition name="fade">
      <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess"></loginview>
     </transition>
@@ -16,6 +15,7 @@ import $ from 'jquery'
 import bar from '@/components/bar'
 import login from '@/components/login'
 import loading from '@/components/loading'
+const qs = require('qs')
 export default {
   name: 'app',
   data () {
@@ -30,14 +30,42 @@ export default {
   },
   created: function () {
     this.getPath()
-   // this.$router.push('/dist/login/changepwd')
-   // console.log(window.localStorage)
-    if ('loginsuccess' in window.localStorage) {
+    if ('isloginsuccess' in window.localStorage) {
       var loginsuccess
-      loginsuccess = window.localStorage.getItem('loginsuccess')
+      loginsuccess = window.localStorage.getItem('isloginsuccess')
+      var selfinfo = window.localStorage.getItem('selfinfo')
+      selfinfo = JSON.parse(selfinfo)
+      console.log(selfinfo)
       if (loginsuccess === 'true') {
-        // console.log(loginsuccess)
-        this.isloginshow = false
+        var that = this
+        var usercode = window.localStorage.getItem('usercode')
+        var userpwd = window.localStorage.getItem('userpwd')
+        var usertype = window.localStorage.getItem('usertype')
+        var data0 = { openid: '123456', usercode: usercode, userpwd: userpwd, usertype: usertype }
+        var url = '/sms-wx/smsUserController.do?doMUserLogin'
+        this.$ajax.post(url, qs.stringify(data0), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(function (data) {
+          if (data.data !== null && data.data !== 'undefined' && data.data !== undefined) {
+            var isloginsuccess = data.data.success
+            var selfinfo = data.data.attributes
+            var selfinfol = JSON.stringify(selfinfo)
+            if (isloginsuccess === true) {
+              window.localStorage.setItem('isloginsuccess', 'true')
+              window.localStorage.setItem('selfinfo', selfinfol)
+              that.isloginshow = false
+            } else {
+              window.localStorage.clear()
+              alert('登陆失败，请重新登录')
+              window.location.reload(true)
+            }
+          }
+        })
+          .catch(function (err) {
+            alert('error:' + err)
+          })
       }
     }
   },

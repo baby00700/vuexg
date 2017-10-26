@@ -32,6 +32,7 @@
   import vue from 'vue'
   import resource from 'vue-resource'
   import changepwd from '@/components/changepwd'
+  const qs = require('qs')
 
   vue.use(resource)
   export default {
@@ -80,30 +81,39 @@
           this.isdisable = true
           this.isbutture = false
           console.log(this.isbutture)
-          // 登录方法 https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login
-          var url = 'https://easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/login'
-          this.$http.post(url, {emulateJSoN: true})
-            .then(function (data) {
-              // console.log(data)
-              // console.log(data.body.data.success)
-              if (data.body.data.success === 'true') {
-                // 初始化页面
-                console.log(data.body.data.success)
-                this.isbutture = false
-                this.isbutfalse = true
-                this.isbut2show = false
-                this.buthide = false
-                this.isdisable = false
-                this.ischangepwdshow = true
-                window.localStorage.setItem('loginsuccess', 'true')
-                this.$emit('teacherloginsuccess')
+          var that = this
+          var usercode = '1001'
+          var userpwd = '232455'
+          var usertype = '1'
+          var data0 = { openid: '888888', usercode: usercode, userpwd: userpwd, usertype: usertype }
+          var url = '/sms-wx/smsUserController.do?doMUserLogin'
+          this.$ajax.post(url, qs.stringify(data0), {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }).then(function (data) {
+            if (data.data !== null && data.data !== 'undefined' && data.data !== undefined) {
+              console.log(data.data.attributes)
+              var isloginsuccess = data.data.success
+              var selfinfo = data.data.attributes
+              var selfinfol = JSON.stringify(selfinfo)
+              if (isloginsuccess === true) {
+                window.localStorage.setItem('isloginsuccess', 'true')
+                window.localStorage.setItem('selfinfo', selfinfol)
+                window.localStorage.setItem('usercode', '1001')
+                window.localStorage.setItem('userpwd', '232455')
+                window.localStorage.setItem('usertype', '1')
+                that.$emit('teacherloginsuccess', selfinfo)
               } else {
-                // window.location.reload(true)
+                window.localStorage.clear()
+                alert('登陆失败，请重新登录')
+                window.location.reload(true)
+                window.location.href = 'http://192.168.1.167:8081/dist'
               }
-            }, function (data) {
-              alert(data)
-            }).catch(function (res) {
-              alert(res)
+            }
+          })
+            .catch(function (err) {
+              alert(err)
             })
         }
       },

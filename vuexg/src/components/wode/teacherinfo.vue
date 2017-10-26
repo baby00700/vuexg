@@ -1,8 +1,25 @@
 <template>
   <div class="studentinfo">
+    <div class="selfinfo">
+      <div class="touxiang"></div>
+      <div class="infolist">
+        <ul>
+          <li>
+            <div class="infoline">
+              <span class="key">姓名:</span><span class="value">{{xm}}</span>
+            </div>
+          </li>
+          <li>
+            <div class="infoline">
+              <span class="key">工号:</span><span class="value">{{gh}}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
     <transition  name="custom-classes-transition"
-                 enter-active-class="animated fadeIn"
-                 leave-active-class="animated fadeOut">
+                 enter-active-class="animated bounceInLeft"
+                 leave-active-class="animated bounceOutRight">
       <changepwdview v-show="ischangepwdviewshow" class="changepwdview" @changepwdhide="hidechangepwd"></changepwdview>
     </transition>
     <div class="baseinfo">
@@ -30,7 +47,7 @@
         <div class="title">
           部门
         </div>
-        <div class="con">信息中心</div>
+        <div class="con">{{bm}}</div>
       </div>
 
       <div class="baseline">
@@ -39,13 +56,15 @@
         <div class="title">
           手机
         </div>
-        <div class="con sjh"><span>13133817015</span><el-switch
-          v-model="isopen"
+        <div class="con sjh"><span>{{sj}}</span><el-switch
+          v-model="phoneisopen"
           on-color="#13ce66"
           off-color="#ff4949"
+          class="swich"
           on-text="公开"
-          off-text="私密"
-          class="swich">
+          off-text="隐藏"
+          on-value="1"
+          off-value="0" @change="setPhoneOpenOrClose">
         </el-switch></div>
       </div>
     </div>
@@ -60,7 +79,6 @@
       </div>
     </div>
     <div class="loginout" @click="loginout">退出登录</div>
-
   </div>
 </template>
 
@@ -68,18 +86,36 @@
   import changepwd from '@/components/changepwd'
   import { Loading } from 'element-ui'
   import { MessageBox } from 'mint-ui'
+  import axios from 'axios'
 
   export default {
-    name: 'studentinfo',
+    name: 'teacherinfo',
     data () {
       return {
         ischangepwdviewshow: false,
         dialogVisible: false,
-        isopen: false
+        phoneisopen: '0',
+        xm: '',
+        gh: '',
+        bm: '',
+        sj: ''
       }
     },
+    created: function () {
+      var selfinfo = window.localStorage.getItem('selfinfo')
+      selfinfo = JSON.parse(selfinfo)
+      this.xm = selfinfo.userName
+      this.gh = selfinfo.userCode
+      this.xb = selfinfo.xb
+      if (this.xb === '1') {
+        this.xb = '男'
+      } else {
+        this.xb = '女'
+      }
+      this.bm = selfinfo.departname
+      this.sj = selfinfo.lxdh
+    },
     mounted: function () {
-      console.log(this.selfinfo)
     },
     props: ['selfinfo'],
     methods: {
@@ -87,9 +123,15 @@
         MessageBox.confirm('确定退出登陆?').then(action => {
           let loadingInstance1 = Loading.service({fullscreen: true, customClass: 'loading'})
           setTimeout(function () {
-            loadingInstance1.close()
-            window.localStorage.clear()
-            location.reload(true)
+            var url = '/sms-wx/smsUserController.do?cancelLogin'
+            axios.post(url).then(function (data) {
+              console.log(data)
+              loadingInstance1.close()
+              window.localStorage.clear()
+              window.location.reload(true)
+              window.localStorage.setItem('isloginsuccess', 'false')
+              window.location.href = 'http://192.168.1.167:8081/dist'
+            })
           }, 3000)
         })
       },
@@ -98,20 +140,27 @@
       },
       hidechangepwd: function () {
         this.ischangepwdviewshow = false
+      },
+      setPhoneOpenOrClose: function () {
+        let loadingInstance0 = Loading.service({ fullscreen: true })
+        var url = '/sms-wx/smsUserController.do?setPhoneOpenOrClose'
+        var that = this
+        setTimeout(function () {
+          axios.post(url).then(function (data) {
+            console.log(data.data.obj)
+            console.log(typeof data.data.obj)
+            console.log(that.phoneisopen)
+            that.phoneisopen = data.data.obj
+            loadingInstance0.close()
+          })
+        }, 500)
       }
     },
     watch: {
-      isopen: function (newval, oldval) {
-        // ajax
-        let loadingInstance2 = Loading.service({fullscreen: true, customClass: 'loading'})
-        setTimeout(function () {
-          loadingInstance2.close()
-        }, 3000)
-      },
       ischangepwdviewshow: function () {
-        let loadingInstance0 = Loading.service({ fullscreen: true })
+        // let loadingInstance0 = Loading.service({ fullscreen: true })
         setTimeout(function () {
-          loadingInstance0.close()
+         //  loadingInstance0.close()
         }, 1000)
       }
     },
@@ -126,18 +175,78 @@
   .studentinfo{
     width:100%;
     /*height:calc(100% - 180px);*/
-    height:400px;
+    height:100%;
     background-color:#ecedf1;
     position:fixed;
-    top:90px;
+    top:0px;
     bottom: 50px;
     overflow:scroll;
+  }
+  .selfinfo{
+    width:100%;
+    height:90px;
+    background-color:#38adff;
+    position:fixed;
+    top:0px;
+    z-index:888;
+
+  }
+  .touxiang{
+    width:64px;
+    height:64px;
+    position: absolute;
+    top:10px;
+    left:20px;
+    border-radius:40px;
+    border:2px solid #fff;
+    overflow: hidden;
+    background-image:url("/static/img/head.png");
+    background-size:100% 100%;
+  }
+  .infolist{
+    width:calc(100% - 120px);
+    height:60px;
+    position:absolute;
+    top:15px;
+    left:100px;
+    /*background-color:green;*/
+  }
+  .infoline{
+    width:100%;
+    height:30px;
+    /*background-color:#00ff00;*/
+    position: relative;
+    font-size:17px;
+    font-weight:500;
+  }
+  .key{
+    width: 50px;
+    height:30px;
+    /*background-color:yellow;*/
+    line-height:30px;
+    display: block;
+    color:#fff;
+  }
+  .value{
+    width:calc(100% - 50px);
+    height:30px;
+    /*background-color:red;*/
+    display:block;
+    line-height:30px;
+    position:absolute;
+    left:50px;
+    top:0px;
+    text-align: left;
+    color:#fff;
+  }
+  li{
+    list-style: none;
   }
   .baseinfo{
     width:100%;
     height:88px;
     position:absolute;
-    top:10px;
+    top:100px;
   }
   .baseline{
     width:100%;
@@ -180,19 +289,19 @@
     width:100%;
     height:88px;
     position:absolute;
-    top:108px;
+    top:200px;
   }
   .changepwd{
     width:100%;
     height:44px;
     position:absolute;
-    top:206px;
+    top:298px;
   }
   .loginout{
     width:100%;
     height:44px;
     position:absolute;
-    top:259px;
+    top:352px;
     background-color:#fff;
     text-align: center;
     line-height:44px;
@@ -200,10 +309,8 @@
   .changepwdview{
     width:100%;
     height:100%;
-    position:fixed;
     top:0px;
     left:0px;
-    z-index:999;
   }
   .loading{
     background-color:#fff;
