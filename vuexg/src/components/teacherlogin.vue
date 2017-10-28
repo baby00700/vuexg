@@ -32,6 +32,7 @@
   import vue from 'vue'
   import resource from 'vue-resource'
   import changepwd from '@/components/changepwd'
+  import bus from '@/components/bus.js'
   const qs = require('qs')
 
   vue.use(resource)
@@ -104,6 +105,7 @@
                 window.localStorage.setItem('userpwd', '232455')
                 window.localStorage.setItem('usertype', '1')
                 that.$emit('teacherloginsuccess', selfinfo)
+                bus.$emit('loginsuccessfromroot')
               } else {
                 window.localStorage.clear()
                 alert('登陆失败，请重新登录')

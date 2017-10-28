@@ -1,6 +1,6 @@
 <template>
-  <div class="studentinfo" style="background-color:red">
-    123123123123123
+  <div class="studentinfo" >
+    成绩查询
   </div>
 </template>
 
@@ -30,5 +30,6 @@
     width:100%;
     height:100%;
     z-index:10000;
+    background-color:yellow;
   }
 </style>

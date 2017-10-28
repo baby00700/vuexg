@@ -66,17 +66,24 @@
       '$route' (to, from) {                    // 控制动画方向
         // console.log(to.path + '**************')
         var pathass = to.path
+        console.log(pathass)
         if (pathass === '/dist/' || pathass === '/') {
           this.$router.push('/dist/zhuye')
         }
-        pathass = pathass.split('/')
-        pathass = pathass[2]
-       // console.log(pathass)
-        for (var i = 0; i < this.barcons.length; i++) {
-          if (this.barcons[i] === pathass) {
-         //   console.log(i + '//**//')
-            this.topage(i)
-            break
+        if (pathass !== '/') {
+          pathass = pathass.split('/')
+          console.log(pathass.length)
+          // console.log(pathass)
+          if (pathass.length === 3) {
+            pathass = pathass[2]
+            console.log(pathass.length + '******')
+            for (var i = 0; i < this.barcons.length; i++) {
+              if (this.barcons[i] === pathass) {
+                console.log(i + '//**//')
+                this.topage(i)
+                break
+              }
+            }
           }
         }
       }

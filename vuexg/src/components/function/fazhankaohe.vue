@@ -1,6 +1,6 @@
 <template>
   <div class="studentinfo" style="background-color:red">
-    123123123123123
+   发展考核
   </div>
 </template>
 

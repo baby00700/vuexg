@@ -39,6 +39,7 @@ import Vue from 'vue'
 import resource from 'vue-resource'
 import changepwd from '@/components/changepwd'
 import teacherlogin from '@/components/teacherlogin'
+import bus from '@/components/bus.js'
 const qs = require('qs')
 
 Vue.use(resource)
@@ -115,6 +116,7 @@ export default {
               window.localStorage.setItem('usertype', '0')
               window.localStorage.setItem('phoneisopen', phoneisopen)
               that.$emit('loginsuccess', selfinfo)
+              bus.$emit('loginsuccessfromroot')
             } else {
               window.localStorage.clear()
               alert('登陆失败，请重新登录')

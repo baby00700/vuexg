@@ -15,7 +15,9 @@ import $ from 'jquery'
 import bar from '@/components/bar'
 import login from '@/components/login'
 import loading from '@/components/loading'
+import bus from '@/components/bus.js'
 const qs = require('qs')
+
 export default {
   name: 'app',
   data () {
@@ -33,9 +35,9 @@ export default {
     if ('isloginsuccess' in window.localStorage) {
       var loginsuccess
       loginsuccess = window.localStorage.getItem('isloginsuccess')
-      var selfinfo = window.localStorage.getItem('selfinfo')
-      selfinfo = JSON.parse(selfinfo)
-      console.log(selfinfo)
+     // var selfinfo = window.localStorage.getItem('selfinfo')
+       // selfinfo = JSON.parse(selfinfo)
+      // console.log(selfinfo)
       if (loginsuccess === 'true') {
         var that = this
         var usercode = window.localStorage.getItem('usercode')
@@ -53,9 +55,14 @@ export default {
             var selfinfo = data.data.attributes
             var selfinfol = JSON.stringify(selfinfo)
             if (isloginsuccess === true) {
+              console.log(selfinfo)
+              var phoneisopen = selfinfol.phoneisopen
               window.localStorage.setItem('isloginsuccess', 'true')
               window.localStorage.setItem('selfinfo', selfinfol)
+              window.localStorage.setItem('phoneisopen', phoneisopen)
               that.isloginshow = false
+              bus.$emit('loginsuccessfromroot')
+              console.log('app执行...')
             } else {
               window.localStorage.clear()
               alert('登陆失败，请重新登录')

@@ -142,7 +142,11 @@ export default {
   props: ['selfinfo'],
   methods: {
     loginout: function () {
-      MessageBox.confirm('确定退出登陆?').then(action => {
+      MessageBox.confirm('确定退出登陆?', {
+        title: '提示',
+        confirmButtonClass: 'confirmbutclass',
+        cancelButtonClass: 'cancelbutclass'
+      }).then(action => {
         let loadingInstance1 = Loading.service({fullscreen: true, customClass: 'loading'})
         setTimeout(function () {
           var url = '/sms-wx/smsUserController.do?cancelLogin'
@@ -169,10 +173,11 @@ export default {
       var that = this
       setTimeout(function () {
         axios.post(url).then(function (data) {
-          console.log(data.data.obj)
-          console.log(typeof data.data.obj)
-          console.log(that.phoneisopen)
+//          console.log(data.data.obj)
+//          console.log(typeof data.data.obj)
+//          console.log(that.phoneisopen)
           that.phoneisopen = data.data.obj
+          window.localStorage.setItem('phoneisopen', data.data.obj)
           loadingInstance0.close()
         })
       }, 500)
@@ -193,8 +198,26 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+  .confirmbutclass{
+    width: 1em !important;
+    height: 3em !important;
+    font-size: 16px !important;
+    line-height:1em !important;
+    margin-top:-4px !important;
+  }
+  .cancelbutclass{
+    width: 1em !important;
+    height: 3em !important;
+    line-height:1em !important;
+    font-size: 16px !important;
+    margin-top:-4px !important;
+    border-right:1px solid #fff !important;
+  }
+</style>
 <style scoped>
-.studentinfo{
+
+  .studentinfo{
   width:100%;
   height:100%;
   /*border:1px solid red;*/
