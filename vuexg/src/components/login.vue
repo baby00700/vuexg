@@ -120,8 +120,8 @@ export default {
             } else {
               window.localStorage.clear()
               alert('登陆失败，请重新登录')
-              window.location.reload(true)
-              window.location.href = 'http://192.168.1.167:8081/dist'
+             // window.location.reload(true)
+             // window.location.href = 'http://192.168.1.167:8081/dist'
             }
           }
         })

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="fade">
+    <transition>
      <loginview class="loginview" v-if="isloginshow" @loginsuccess="logintosucess"></loginview>
     </transition>
       <transition :name="transitionName">
@@ -56,7 +56,8 @@ export default {
             var selfinfol = JSON.stringify(selfinfo)
             if (isloginsuccess === true) {
               console.log(selfinfo)
-              var phoneisopen = selfinfol.phoneisopen
+              var phoneisopen = selfinfo.phoneisopen
+              console.log(phoneisopen)
               window.localStorage.setItem('isloginsuccess', 'true')
               window.localStorage.setItem('selfinfo', selfinfol)
               window.localStorage.setItem('phoneisopen', phoneisopen)

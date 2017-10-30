@@ -110,7 +110,7 @@ export default {
     return {
       ischangepwdviewshow: false,
       dialogVisible: false,
-      phoneisopen: '0',
+      phoneisopen: '',
       xm: '',
       xh: '',
       xb: '',
@@ -136,6 +136,8 @@ export default {
     this.zy = selfinfo.zymc
     this.bj = selfinfo.bjmc
     this.sj = selfinfo.lxdh
+    var phoneisopen = window.localStorage.getItem('phoneisopen')
+    this.phoneisopen = phoneisopen
   },
   mounted: function () {
   },

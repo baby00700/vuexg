@@ -86,7 +86,7 @@
           var usercode = '1001'
           var userpwd = '232455'
           var usertype = '1'
-          var data0 = { openid: '888888', usercode: usercode, userpwd: userpwd, usertype: usertype }
+          var data0 = { openid: '123456', usercode: usercode, userpwd: userpwd, usertype: usertype }
           var url = '/sms-wx/smsUserController.do?doMUserLogin'
           this.$ajax.post(url, qs.stringify(data0), {
             headers: {
@@ -109,8 +109,8 @@
               } else {
                 window.localStorage.clear()
                 alert('登陆失败，请重新登录')
-                window.location.reload(true)
-                window.location.href = 'http://192.168.1.167:8081/dist'
+               // window.location.reload(true)
+               // window.location.href = 'http://192.168.1.167:8081/dist'
               }
             }
           })

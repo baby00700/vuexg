@@ -6,11 +6,11 @@
     <router-view class="functionview"></router-view>
     </transition>
     <div class="lunbo">
-      <mt-swipe :auto="0" :show-indicators="false">
+      <mt-swipe :auto="3000" :show-indicators="false">
           <mt-swipe-item v-for="item in lunboimglist" class="lunbotu" :key="item.title">
             <div class="titlebox">{{item.title}}</div>
             <div class="imgbox">
-              <img src="http://192.168.1.155:8081/sms-wx/upload/files/20140627233502FEzyc38j.jpg" alt="">
+              <img :src='item.image_href' alt="" width="100%" height="100%">
             </div>
           </mt-swipe-item>
       </mt-swipe>
@@ -18,23 +18,49 @@
     <div class="funclistwrap">
       <div class="functionlist">
         <li class="functiccon" v-for="(item, $index) in functionlist"  :key="item.columnName"  @click="tofunctions($index)">
-            <div class="funcicon"></div>
+            <div class="funcicon">
+              <img :src='item.columnimage' alt="" width="100%">
+            </div>
             <div class="funcname">{{item.columnName}}</div>
         </li>
       </div>
+    </div>
+    <div class="newswrap">
+      <div class="changetop">
+        <div class="topbut" :class="{ active: isnewslistshow }" @click="shownews()">校内新闻</div>
+        <div class="topbut" :class="{ active: isnoticelistshow}" @click="shownotice()">校内公告</div>
+      </div>
+      <div class="listinfo">
+        <div class="infolist">
+          <transition  name="custom-classes-transition"
+                       enter-active-class="animated "
+                      >
+          <newslist v-show="isnewslistshow"></newslist>
+          </transition>
+          <transition  name="custom-classes-transition"
+                       enter-active-class="animated "
+                       >
+          <noticelist v-show="isnoticelistshow"></noticelist>
+          </transition>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { Swipe, SwipeItem } from 'mint-ui'
+import { Swipe, SwipeItem, CellSwipe } from 'mint-ui'
 import axios from 'axios'
-import { Loading } from 'element-ui'
+// import { Loading } from 'element-ui'
 import bus from '@/components/bus.js'   // 事件总线
+import newslist from '@/components/zhuye/newslist'
+import noticelist from '@/components/zhuye/noticelist'
 
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
+Vue.component(CellSwipe.name, CellSwipe)
 export default {
   name: 'zhuye',
   data () {
@@ -44,8 +70,10 @@ export default {
         {columnName: '成绩查询', columnbyName: 'chengjichaxun', columnimage: 'upload/1509087429968_d01373f082025aaf9789fc56fdedab64024f1af7.jpg'}
       ],
       lunboimglist: [
-        {image_href: 'upload/files/20140627233502FEzyc38j.jpg', image_name: '19300001024098134717639977056.jpg', title: 'IPHONE7'}
-      ]
+        {image_href: 'http://192.168.1.155:8081/sms-wx/upload/files/20140627233502FEzyc38j.jpg', image_name: '19300001024098134717639977056.jpg', title: 'IPHONE7'}
+      ],
+      isnewslistshow: true,
+      isnoticelistshow: false
     }
   },
   created: function () {
@@ -54,6 +82,7 @@ export default {
     if (islogin === 'true') {
       that.getfunctionslist()
       that.getimageurl()
+      bus.$emit('zhuyeok')
     }
   },
   mounted: function () {
@@ -74,20 +103,19 @@ export default {
       that.getimageurl()
     })
   },
-
   methods: {
     alert: function () {
       alert('ajsadfvujf')
     },
     tofunctions: function (index) {
-      console.log(index)
+     // console.log(index)
       this.$router.push('/dist/zhuye/' + this.functionlist[index].columnbyName)
     },
     getfunctionslist: function () {
       console.log('事件已接收')
-      let loadingInstance1 = Loading.service({fullscreen: true})
+     // let loadingInstance1 = Loading.service({fullscreen: true})
       var that = this
-      var url = '/sms-wx/smsUserController.do?doMUserLogin&columnRoleList'
+      var url = '/sms-wx/smsUserController.do?columnRoleList'
      // http://192.168.1.110:8081/sms-wx/smsUserController.do?doMUserLogin&columnRoleList
       axios.post(url).then(function (data) {
         that.functionlist = []
@@ -96,12 +124,18 @@ export default {
          // console.log(islogin)
           if (islogin === 'true' && data.data.msg.length >= 1 && data.data.msg !== null && data.data.msg !== 'null' && data.data.msg !== undefined && data.data.msg !== 'undefined') {
             var datamsg = JSON.parse(data.data.msg)
+            // console.log(datamsg)
+            var imgurl = 'http://192.168.1.155:8080/sms/'
             for (var i = 0; i < datamsg.length; i++) {
-              // console.log(i)
-              var funcnames = {columnbyName: datamsg[i].columnbyName, columnName: datamsg[i].columnName}
+              datamsg[i].columnimage = imgurl + datamsg[i].columnimage
+              var funcnames = {columnbyName: datamsg[i].columnbyName, columnName: datamsg[i].columnName, columnimage: datamsg[i].columnimage}
               that.functionlist.push(funcnames)
-              loadingInstance1.close()
+            //  console.log(that.functionlist[i])
             }
+           // console.log(that.functionlist)
+            setTimeout(function () {
+            //  loadingInstance1.close()
+            }, 500)
           }
         }
       })
@@ -121,20 +155,45 @@ export default {
           if (data.data.msg !== null && data.data.msg !== 'null' && data.data.msg !== undefined && data.data.msg !== 'undefined') {
             if (data.data.msg.length > 0) {
               var imgdata = JSON.parse(data.data.msg)
-              console.log(imgdata)
-              for (var i = 0; i < imgdata.length; i++) {
-                that.lunboimglist.push(imgdata[i])
+            //  console.log(imgdata)
+              var imgdatalength = imgdata.length
+              if (imgdatalength >= 4) {  // 轮播图限制显示4张
+                imgdatalength = 4
               }
-              console.log(that.lunboimglist)
+              var commonimgurl = 'http://192.168.1.155:8081/sms-wx/'
+              for (var i = 0; i < imgdatalength; i++) {
+                that.lunboimglist.push(imgdata[i])
+              //  console.log(imgdata[i].image_href)
+                imgdata[i].image_href = commonimgurl + imgdata[i].image_href
+              }
+             // console.log(that.lunboimglist)
             }
           }
         }
       }).catch(function (err) {
         alert(err)
       })
+    },
+    shownews: function () {
+      this.isnewslistshow = true
+      this.isnoticelistshow = false
+    },
+    shownotice: function () {
+      this.isnewslistshow = false
+      this.isnoticelistshow = true
+    }
+  },
+  watch: {
+    isnewslistshow: function (newval, oldval) {
+      this.isnewslistshow = !this.isnoticelistshow
+    },
+    isnoticelistshow: function (newval, oldval) {
+      this.isnoticelistshow = !this.isnewslistshow
     }
   },
   components: {
+    newslist: newslist,
+    noticelist: noticelist
   }
 }
 </script>
@@ -143,7 +202,7 @@ export default {
 <style scoped>
   .lunbo{
     width:100%;
-    height:180px;
+    height:200px;
     background-color:#fff;
   }
  .imgbox{
@@ -154,43 +213,43 @@ export default {
   .funclistwrap{
     width:100%;
     /*height:140px;*/
-    background-color:green;
+    background-color:#fff;
   overflow: scroll;
   }
   .functionlist{
     width:150%;
     /*//height:140px;*/
     /*background-color:yellow;*/
-    padding-top:10px;
     padding-right:-150%;
   }
   .functiccon{
     display: inline-block;
-    background-color: darkgreen;
+    /*background-color: darkgreen;*/
     width:12%;
-    height:70px;
+    height:110px;
     float: left;
     margin-left:4%;
-    margin-bottom:10px;
+    margin-top:25px;
+    margin-bottom:0px;
     position: relative;
   }
 
 .funcicon{
-  width:50px;
-  height:50px;
+  width:60px;
+  height:60px;
   border-radius:25px;
-  background-color:yellow;
   position:absolute;
-  left:calc(50% - 25px);
+  left:calc(50% - 30px);
 
 }
   .funcname{
     width:100%;
     height:20px;
-    background-color:blue;
+    /*background-color:blue;*/
     position:absolute;
-    top:50px;
-    color:#fff;
+    top:65px;
+    color:#555;
+    font-size:15px;
   }
   .functionview{
     width:100%;
@@ -200,12 +259,45 @@ export default {
   }
   .titlebox{
     width:100%;
-    height:18px;
-    background-color:rgba(255,255,255,0.5);
+    height:26px;
+    background-color:rgba(0,0,0,0.3);
     position:absolute;
     bottom:0px;
-    line-height:18px;
+    color:#fff;
+    line-height:26px;
     font-size:15px;
-    font-weight:600;
+    font-weight:500;
   }
+  .newswrap{
+    width:100%;
+    /*border:1px solid red;*/
+    margin-top:10px;
+  }
+  .changetop{
+    width:100%;
+    height:40px;
+    /*background-color:red;*/
+    border-bottom:1px solid #eee;
+  }
+  .topbut{
+    height:45px;
+    width:50%;
+    float: left;
+    background-color:#fff;
+    text-align: center;
+    line-height:45px;
+    box-sizing: border-box;
+
+    border-bottom:1px solid #eee;
+  }
+  .active{
+    /*background-color:green;*/
+    border-bottom:3px solid #179aec;
+
+  }
+  .notice{
+    /*background-color:blue;*/
+    /*border-bottom:3px solid #179aec;*/
+  }
+
 </style>
