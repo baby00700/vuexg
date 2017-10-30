@@ -22,6 +22,7 @@
 
 <script>
   import axios from 'axios'
+  import bus from '@/components/bus.js'   // 事件总线
   const qs = require('qs')
   export default {
     name: 'news',
@@ -35,6 +36,18 @@
       if (islogin === 'true') {
         this.getnewslistdata()
       }
+    },
+    mounted: function () {
+      let that = this
+      bus.$on('loginsuccessfromroot', function () {  // 从app触发 从login触发
+        that.getnewslistdata()
+      })
+    },
+    beforeDestroy: function () {
+      let that = this
+      bus.$off('loginsuccessfromroot', function () {
+        that.getnewslistdata()
+      })
     },
     methods: {
       getnewslistdata: function () {
@@ -75,7 +88,8 @@
 <style scoped>
   .newslist{
     width:100%;
-    height:350px;
+    /*height:350px;*/
+    padding-bottom:60px;
     background-color:#ECEDF1 ;
   }
   .wrapline{

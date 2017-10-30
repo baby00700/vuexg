@@ -200,6 +200,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .zhuye{
+    width: 100%;
+    padding-bottom:60px;
+    overflow: scroll;
+  }
   .lunbo{
     width:100%;
     height:200px;
@@ -217,7 +222,7 @@ export default {
   overflow: scroll;
   }
   .functionlist{
-    width:150%;
+    width:170%;
     /*//height:140px;*/
     /*background-color:yellow;*/
     padding-right:-150%;
@@ -271,7 +276,7 @@ export default {
   .newswrap{
     width:100%;
     /*border:1px solid red;*/
-    margin-top:10px;
+    margin-top:15px;
   }
   .changetop{
     width:100%;

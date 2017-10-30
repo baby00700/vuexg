@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import bar from '@/components/bar'
 import login from '@/components/login'
 import loading from '@/components/loading'
@@ -67,7 +66,7 @@ export default {
             } else {
               window.localStorage.clear()
               alert('登陆失败，请重新登录')
-              window.location.reload(true)
+              // window.location.reload(true)
             }
           }
         })
@@ -98,7 +97,6 @@ export default {
     loadinghide: function () {
       this.isloadingshow = false
       console.log(this.isloadingshow)
-      alert($)
     },
     hidebar: function () {
       this.isbarshow = false
@@ -184,7 +182,8 @@ export default {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: suto;
+    overflow: scroll;
     transition: all .5s cubic-bezier(.55,0,.1,1);
     background-color:#ecedf1;
   }

@@ -75,7 +75,7 @@
         <div class="title">
           修改密码
         </div>
-        <div class="con"><i class="el-icon-arrow-right"></i></div>
+        <div class="con"><i class="el-icon-arrow-right" style="color:#999"></i></div>
       </div>
     </div>
     <div class="loginout" @click="loginout">退出登录</div>
@@ -175,12 +175,13 @@
   .studentinfo{
     width:100%;
     /*height:calc(100% - 180px);*/
-    height:100%;
+    height:auto;
     background-color:#ecedf1;
     position:fixed;
     top:0px;
     bottom: 50px;
     overflow:scroll;
+    padding-bottom:60px;
   }
   .selfinfo{
     width:100%;
@@ -246,7 +247,7 @@
     width:100%;
     height:88px;
     position:absolute;
-    top:100px;
+    top:105px;
   }
   .baseline{
     width:100%;
@@ -289,19 +290,19 @@
     width:100%;
     height:88px;
     position:absolute;
-    top:200px;
+    top:205px;
   }
   .changepwd{
     width:100%;
     height:44px;
     position:absolute;
-    top:298px;
+    top:305px;
   }
   .loginout{
     width:100%;
     height:44px;
     position:absolute;
-    top:352px;
+    top:360px;
     background-color:#fff;
     text-align: center;
     line-height:44px;

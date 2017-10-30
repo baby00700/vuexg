@@ -46,5 +46,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.wode{
+  width: 100%;
+  padding-bottom:60px;
+  overflow: scroll;
+}
 </style>

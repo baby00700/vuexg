@@ -90,7 +90,7 @@
         <div class="title">
           修改密码
         </div>
-        <div class="con"><i class="el-icon-arrow-right"></i></div>
+        <div class="con"><i class="el-icon-arrow-right" style="color:#999"></i></div>
       </div>
     </div>
     <div class="loginout" @click="loginout">退出登录</div>
@@ -221,13 +221,14 @@ export default {
 
   .studentinfo{
   width:100%;
-  height:100%;
+  height:auto;
   /*border:1px solid red;*/
   background-color:#ecedf1;
   position:fixed;
   top:0px;
   bottom: 50px;
   overflow:scroll;
+    padding-bottom:60px;
 }
 .selfinfo{
   width:100%;
@@ -293,7 +294,7 @@ li{
    width:100%;
    height:88px;
    position:absolute;
-   top:100px;
+   top:105px;
  }
 .baseline{
   width:100%;
@@ -336,19 +337,19 @@ li{
     width:100%;
     height:176px;
     position:absolute;
-    top:198px;
+    top:210px;
   }
   .changepwd{
     width:100%;
     height:44px;
     position:absolute;
-    top:388px;
+    top:405px;
   }
   .loginout{
     width:100%;
     height:44px;
     position:absolute;
-    top:443px;
+    top:465px;
     background-color:#fff;
     text-align: center;
     line-height:44px;
