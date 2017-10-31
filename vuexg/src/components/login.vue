@@ -115,8 +115,10 @@ export default {
               window.localStorage.setItem('userpwd', '232455')
               window.localStorage.setItem('usertype', '0')
               window.localStorage.setItem('phoneisopen', phoneisopen)
+              window.localStorage.setItem('step', 'login')
               that.$emit('loginsuccess', selfinfo)
               bus.$emit('loginsuccessfromroot')
+             // window.location.reload()
             } else {
               window.localStorage.clear()
               alert('登陆失败，请重新登录')

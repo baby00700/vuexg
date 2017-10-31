@@ -12,13 +12,14 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
   import Vue from 'vue'
   import {Popup, Picker} from 'mint-ui'
   Vue.component(Popup.name, Popup)
   Vue.component(Picker.name, Picker)
+
   export default {
-    name: 'biyelixiao',
+    name: 'qingjia',
     data () {
       return {
         popupVisible: false,
@@ -30,7 +31,8 @@
             className: 'slot1',
             textAlign: 'center'
           }
-        ]
+        ],
+        datetime0: ''
       }
     },
     created: function () {

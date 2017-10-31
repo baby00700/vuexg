@@ -6,10 +6,11 @@
             <div class="icons" :class="listiconcolorclass[item.ww]">请</div>
             <div class="infos">
               <div class="titleinfo">
-                <div class="title">请点击上课签到</div>
-                <div class="cont">请点击上课签到</div>
+                <div class="title"><nobr>请点击上课签到</nobr></div>
+                <div class="cont"><nobr>请点击上课签到</nobr></div>
               </div>
               <div class="timeinfo">9月10日</div>
+              <div class="refdot" >未读</div>
             </div>
           </div>
         </li>
@@ -94,6 +95,15 @@
     position:absolute;
     top:0px;
   }
+ .linewrap:active{
+   height:80px;
+   width:100%;
+   background-color:#fff;
+   border-bottom: 1px solid #eee;
+   position:absolute;
+   top:0px;
+   -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.3) inset;
+ }
   .icons{
     height:60px;
     width:60px;
@@ -141,6 +151,7 @@
     text-align: left;
     line-height: 30px;
     font-size:18px;
+    overflow:hidden;text-overflow:ellipsis;
   }
   .cont{
     width:100%;
@@ -152,6 +163,7 @@
     line-height: 30px;
     font-size:14px;
     color:#999;
+    overflow:hidden;text-overflow:ellipsis;
   }
  .timeinfo{
    width:70px;
@@ -164,4 +176,16 @@
    font-size:14px;
    color:#999;
  }
+  .refdot{
+    width:70px;
+    height:30px;
+    position: absolute;
+    top:30px;
+    right:0px;
+    border-radius:7px;
+    color:#37ACFE;
+    font-size:13px;
+    line-height:30px;
+    font-weight: 100;
+  }
 </style>

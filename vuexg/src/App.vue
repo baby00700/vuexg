@@ -14,7 +14,7 @@
 import bar from '@/components/bar'
 import login from '@/components/login'
 import loading from '@/components/loading'
-import bus from '@/components/bus.js'
+// import bus from '@/components/bus.js'
 const qs = require('qs')
 
 export default {
@@ -34,9 +34,6 @@ export default {
     if ('isloginsuccess' in window.localStorage) {
       var loginsuccess
       loginsuccess = window.localStorage.getItem('isloginsuccess')
-     // var selfinfo = window.localStorage.getItem('selfinfo')
-       // selfinfo = JSON.parse(selfinfo)
-      // console.log(selfinfo)
       if (loginsuccess === 'true') {
         var that = this
         var usercode = window.localStorage.getItem('usercode')
@@ -52,16 +49,17 @@ export default {
           if (data.data !== null && data.data !== 'undefined' && data.data !== undefined) {
             var isloginsuccess = data.data.success
             var selfinfo = data.data.attributes
-            var selfinfol = JSON.stringify(selfinfo)
             if (isloginsuccess === true) {
               console.log(selfinfo)
               var phoneisopen = selfinfo.phoneisopen
               console.log(phoneisopen)
+              var selfinfol = JSON.stringify(selfinfo)
               window.localStorage.setItem('isloginsuccess', 'true')
               window.localStorage.setItem('selfinfo', selfinfol)
               window.localStorage.setItem('phoneisopen', phoneisopen)
+              window.localStorage.setItem('step', 'app')
               that.isloginshow = false
-              bus.$emit('loginsuccessfromroot')
+//              console.log('loginsuccessfromapp')
               console.log('app执行...')
             } else {
               window.localStorage.clear()
@@ -152,6 +150,9 @@ export default {
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active 在低于版本 2.1.8 中 */ {
     opacity: 0
+  }
+  body{
+    background-color:#ECEDF1
   }
 #app {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;

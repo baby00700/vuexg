@@ -155,10 +155,10 @@ export default {
           axios.post(url).then(function (data) {
             console.log(data)
             loadingInstance1.close()
-            window.localStorage.clear()
-            window.location.reload(true)
-            window.localStorage.setItem('isloginsuccess', 'false')
-            window.location.href = 'http://192.168.1.167:8081/dist'
+            // window.localStorage.clear()
+            // window.location.reload(true)
+            // window.localStorage.setItem('isloginsuccess', 'false')
+            // window.location.href = 'http://192.168.1.167:8081/dist'
           })
         }, 1000)
       })

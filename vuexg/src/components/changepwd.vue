@@ -1,8 +1,8 @@
 <template>
-  <div class="changepwd">
+  <div class="changepwd" >
     <div class="pwd">
-      <label for="oldpwdinput" class="pwdlabel">身份证号</label>
-      <input type="text" id="oldpwdinput" class="pwdinput" placeholder="请输入身份证号" v-model="oldpwd" @change="validatepwd" >
+      <label for="oldpwdinput" class="pwdlabel">旧密码</label>
+      <input type="text" id="oldpwdinput" class="pwdinput" placeholder="请输入旧密码" v-model="oldpwd" @change="validatepwd" >
     </div>
     <div class="pwd">
       <label for="newpwdinput" class="pwdlabel">新密码</label>
@@ -27,7 +27,9 @@
 <script>
   import vue from 'vue'
   import resource from 'vue-resource'
-  import { Loading } from 'element-ui'
+  import axios from 'axios'
+ // import { Loading } from 'element-ui'
+  const qs = require('qs')
 
   vue.use(resource)
 
@@ -45,7 +47,8 @@
         isbut1show: false,
         isdisable: true,
         isallok: false,
-        tip: '密码由6-20位英文或数字组成'
+        tip: '密码由6-20位英文或数字组成',
+        isloading: true
       }
     },
     mounted: function () {
@@ -64,20 +67,19 @@
     methods: {
       changepwd: function () {
         if (this.isoldpwdok === true && this.isnewpwdok === true && this.iseqpwd === true) {
-          let loadingInstance1 = Loading.service({ fullscreen: true })
+         // let loadingInstance1 = Loading.service({ fullscreen: true })
           this.isbut0show = false
           this.isbut1show = true
           console.log(this.$data)
-          var url = 'http://www.easy-mock.com/mock/59a92b9fe0dc66334198ddf9/example/changepwd'
-          this.$http.post(url, {emulateJSoN: true})
-            .then(function (data) {
-              this.$emit('changepedhide')
-              setTimeout(function () {
-                loadingInstance1.close()
-                window.localStorage.clear()
-                location.reload(true)
-              }, 3000)
-            })
+          var that = this
+          var url = '/sms-wx/smsUserController.do?modlePwd'
+          var olduserpwd = this.oldpwd
+          var newuserpwd = this.newpwd
+          var data0 = {olduserpwd: olduserpwd, newuserpwd: newuserpwd}
+          axios.post(url, qs.stringify(data0)).then(function (data) {
+            console.log(data)
+            that.isloading = false
+          })
         }
       },
       validatepwd: function () {

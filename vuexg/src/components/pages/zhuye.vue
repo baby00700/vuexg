@@ -83,6 +83,7 @@ export default {
       that.getfunctionslist()
       that.getimageurl()
       bus.$emit('zhuyeok')
+      window.localStorage.setItem('step', 'zhuye')
     }
   },
   mounted: function () {
@@ -166,7 +167,6 @@ export default {
               //  console.log(imgdata[i].image_href)
                 imgdata[i].image_href = commonimgurl + imgdata[i].image_href
               }
-             // console.log(that.lunboimglist)
             }
           }
         }
