@@ -33,12 +33,12 @@
       <div class="listinfo">
         <div class="infolist">
           <transition  name="custom-classes-transition"
-                       enter-active-class="animated "
+                       enter-active-class="animated fadeIn"
                       >
           <newslist v-show="isnewslistshow"></newslist>
           </transition>
           <transition  name="custom-classes-transition"
-                       enter-active-class="animated "
+                       enter-active-class="animated fadeIn"
                        >
           <noticelist v-show="isnoticelistshow"></noticelist>
           </transition>

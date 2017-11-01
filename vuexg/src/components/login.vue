@@ -93,7 +93,7 @@ export default {
         console.log(this.isbutture)
         var that = this
         var usercode = '1222000011'
-        var userpwd = '232455'
+        var userpwd = '888888'
         var usertype = '0'
         var data0 = { openid: '123456', usercode: usercode, userpwd: userpwd, usertype: usertype }
         var url = '/sms-wx/smsUserController.do?doMUserLogin'
@@ -112,7 +112,7 @@ export default {
               window.localStorage.setItem('isloginsuccess', 'true')
               window.localStorage.setItem('selfinfo', selfinfol)
               window.localStorage.setItem('usercode', '1222000011')
-              window.localStorage.setItem('userpwd', '232455')
+              window.localStorage.setItem('userpwd', '888888')
               window.localStorage.setItem('usertype', '0')
               window.localStorage.setItem('phoneisopen', phoneisopen)
               window.localStorage.setItem('step', 'login')

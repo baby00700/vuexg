@@ -101,22 +101,50 @@
   .bar{
     width:100%;
     height:60px;
-    background-color:#fff;
+    /*background-color:#fff;*/
+    /*-wenkit-backdrop-filter: blur(10px);*/
+    /*-wenkit-backdrop-filter: blur(10px);*/
     position: fixed;
     bottom:0px;
     /*-webkit-box-shadow: 0 -1px 10px 2px rgba(0,0,0,0.2);*/
     border-top:1px solid #eee;
     z-index:1;
+
   }
   li{
-    width:20%;
-    height:60px;
-    background-color:#f7f7f7;
-    float:left;
-    list-style-type:none;
-    color:#666666;
-    font-size:12px;
-  }
+      width:20%;
+      height:60px;
+      background-color:#f7f7f7;
+      /*background-color:rgba(255,255,255,0.1);*/
+      /*backdrop-filter: blur(1px);*/
+      /*-webkit-backdrop-filter: blur(10px);*/
+      /*filter: blur(1px);*/
+      float:left;
+      list-style-type:none;
+      color:#666666;
+      font-size:12px;
+
+    -webkit-backdrop-filter: blur(8px); /* Safari for macOS & iOS*/
+    backdrop-filter: blur(8px); /* Google Chrome */
+    background: rgba(250, 250, 250, 0.9); /* 设置背景半透明黑色 */
+
+
+    }
+  /*li:after{*/
+    /*content: '';*/
+    /*width:20%;*/
+    /*height:60px;*/
+    /*!*background-color:#f7f7f7;*!*/
+    /*background-color:rgba(255,255,255,0.1);*/
+    /*backdrop-filter: blur(1px);*/
+    /*-webkit-backdrop-filter: blur(10px);*/
+    /*filter: blur(1px);*/
+    /*float:left;*/
+    /*list-style-type:none;*/
+    /*color:#666666;*/
+    /*font-size:12px;*/
+    /*z-index:-1;*/
+  /*}*/
   .bartb{
     height:38px;
     width:100%;

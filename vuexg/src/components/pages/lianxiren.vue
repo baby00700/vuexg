@@ -1,8 +1,5 @@
 <template>
-  <div class="lianxiren" v-loading.fullscreen.lock="loading2"
-       element-loading-text="拼命加载中"
-       element-loading-spinner="el-icon-loading"
-       element-loading-background="rgba(0, 0, 0, 0.8)">
+  <div class="lianxiren">
     <div class="lxrwrap">
     <div class="lxrcardwrap" v-for="item in lxrlist">
       <div class="cardtop">
@@ -26,19 +23,40 @@
 
 <script>
   import axios from 'axios'
+  import bus from '@/components/bus.js'   // 事件总线
   export default {
     name: 'lianxiren',
     data () {
       return {
         lxrlist: [
+          {xm: '...', xb: '...', lxdh: '...'},
+          {xm: '...', xb: '...', lxdh: '...'},
+          {xm: '...', xb: '...', lxdh: '...'},
+          {xm: '...', xb: '...', lxdh: '...'},
           {xm: '...', xb: '...', lxdh: '...'}
         ],
         loading2: true
       }
     },
+    created: function () {
+      window.localStorage.setItem('step', 'self')
+      var islogin = window.localStorage.getItem('isloginsuccess')
+      var that = this
+      bus.$on('loginsuccessfromroot', function () {  // 从app触发 从login触发
+        that.getlxrlist()
+      })
+      if (islogin === 'true') {
+        that.getlxrlist()
+      }
+    },
+    beforeDestroy: function () {
+      let that = this
+      bus.$off('loginsuccessfromroot', function () {
+        that.newslist.splice(0, that.newslist.length)
+        that.getnewslistdata()
+      })
+    },
     mounted: function () {
-      this.$emit('mountedcomplete')
-      this.getlxrlist()
     },
     methods: {
       getlxrlist: function () {

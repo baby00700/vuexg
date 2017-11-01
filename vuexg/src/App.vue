@@ -136,6 +136,7 @@ export default {
 
 <style >
   @import '../static/css/animate.css';
+
 </style>
 
 <style>
@@ -185,7 +186,7 @@ export default {
     width: 100%;
     height: suto;
     overflow: scroll;
-    transition: all .5s cubic-bezier(.55,0,.1,1);
+    transition: all .6s cubic-bezier(.55,0,.1,1);
     background-color:#ecedf1;
   }
 
