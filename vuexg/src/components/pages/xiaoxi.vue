@@ -21,7 +21,11 @@
             </div>
           </div>
         </li>
+        <li class="lookmore" >
+          点击查看更多历史消息...
+        </li>
       </ul>
+
     <div class="eventzhezhao" v-if="isxxshow">
       <div class="xpoint">startpageY:{{startpageY}}</div>
       <div class="xpoint">endpageY:{{endpageY}}</div>
@@ -358,5 +362,20 @@
     text-align: center;
     /*text-shadow:  3px 3px 1px rgba(0,0,0,0.3);*/
   }
+  .lookmore{
+    height:50px;
+    width:100%;
+    font-size:13px;
+    line-height: 50px;
+    color:cornflowerblue;
+  }
+ .lookmore:active{
+   height:50px;
+   width:100%;
+   background-color:#eee;
+   font-size:13px;
+   line-height: 50px;
+   color:#999;
+ }
 
 </style>
