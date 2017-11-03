@@ -84,7 +84,7 @@
           console.log(this.isbutture)
           var that = this
           var usercode = '1001'
-          var userpwd = '232455'
+          var userpwd = '123456789'
           var usertype = '1'
           var data0 = { openid: '123456', usercode: usercode, userpwd: userpwd, usertype: usertype }
           var url = '/sms-wx/smsUserController.do?doMUserLogin'
@@ -102,7 +102,7 @@
                 window.localStorage.setItem('isloginsuccess', 'true')
                 window.localStorage.setItem('selfinfo', selfinfol)
                 window.localStorage.setItem('usercode', '1001')
-                window.localStorage.setItem('userpwd', '232455')
+                window.localStorage.setItem('userpwd', '123456789')
                 window.localStorage.setItem('usertype', '1')
                 that.$emit('teacherloginsuccess', selfinfo)
                 bus.$emit('loginsuccessfromroot')

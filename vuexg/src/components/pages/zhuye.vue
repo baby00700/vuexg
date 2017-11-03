@@ -114,6 +114,7 @@ export default {
     },
     getfunctionslist: function () {
       console.log('事件已接收')
+      bus.$emit('zhuyeisok')
      // let loadingInstance1 = Loading.service({fullscreen: true})
       var that = this
       var url = '/sms-wx/smsUserController.do?columnRoleList'
@@ -131,9 +132,8 @@ export default {
               datamsg[i].columnimage = imgurl + datamsg[i].columnimage
               var funcnames = {columnbyName: datamsg[i].columnbyName, columnName: datamsg[i].columnName, columnimage: datamsg[i].columnimage}
               that.functionlist.push(funcnames)
-            //  console.log(that.functionlist[i])
             }
-           // console.log(that.functionlist)
+            window.localStorage.setItem('iszhuyeok', 'ok')
             setTimeout(function () {
             //  loadingInstance1.close()
             }, 500)
