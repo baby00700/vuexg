@@ -3,25 +3,26 @@
     <div class="topinfo">
       <div class="classinfo">
         <div class="bjname"><div class="bj">班级:</div> <div class="bjmc">
-          <nobr v-if="isstudentshowbjmc">{{stuclassname}}</nobr>
-          <input type="text" v-if="isteachershowbjmc" class="selbjnput" v-model="classname" @click="bjshowpop()" placeholder="请点击选择班级" readonly="readonly" >
+          <nobr v-if="isstudentshowbjmc" style="text-align: left;color:#20A0FF">{{stuclassname}}</nobr>
+          <nobr><input type="text" style="color:blue" v-if="isteachershowbjmc" class="selbjnput" v-model="classname" @click="bjshowpop()" placeholder="请点击选择班级" readonly="readonly"   :disabled="isinputdidable"></nobr>
         </div></div>
-        <div class="count"><div class="zrs">总人数</div> <div class="bhzrs"><span style="color:#4db3ff">{{bjcount}}</span>人</div></div>
+        <div class="count"><div class="zrs">总人数<span style="color:#4db3ff">{{bjcount}}</span>人</div></div>
       </div>
       <div class="lessoninfo">
         <div class="seltime">
-          <div class="seltimelabel"><nobr>请选择日期:</nobr></div>
-          <input type="text" class="seltimeinput" v-model="classtime" icon="el-icon-search" @click="openPicker" readonly="readonly">
+          <div class="seltimelabel"><nobr>选择日期<span style="color:red;">*</span> </nobr></div>
+          <input type="text" class="seltimeinput" v-model="classtime" icon="el-icon-search" @click="openPicker" readonly="readonly"  :disabled="isinputdidable">
         </div>
         <div class="selkeshi">
-          <div class="selkeshilabel"><nobr>请选择课时:</nobr></div>
-          <input type="text" class="selkeshinput" v-model="keshi" @click="showpop()" placeholder="请选择课时" readonly="readonly">
+          <div class="selkeshilabel"><nobr>选择课时<span style="color:red;">*</span></nobr></div>
+          <input type="text" class="selkeshinput" v-model="keshi" @click="showpop()" placeholder="请选择课时" readonly="readonly"  :disabled="isinputdidable">
         </div>
         <div class="lessonname" >
-          <div class="skcmclabel"><nobr>课程名称:</nobr></div>
-          <input type="text" class="kcmcinput" v-model="kcmc" placeholder="请填写课程名称" maxlength="30"></div>
+          <div class="skcmclabel"><nobr>课程名称<span style="color:red;">*</span></nobr></div>
+          <input type="text" class="kcmcinput" v-model="kcmc" placeholder="请填写课程名称" maxlength="30" :change="islengthok()"  :disabled="isinputdidable"></div>
       </div>
     </div>
+    <div class="teachertips" v-if="isteachershowtips">{{teachertips}}</div>
     <div class="studentslist">
       <div class="studentcard" v-for="(item, $index) in instudentslist" @click="showcard($index)" v-bind:class="{ cardchecked: item.ischecked}">
         <div class="cardtop">
@@ -46,11 +47,26 @@
         </div>
       </div>
     </div>
-    <div class="teachertips" v-if="isteachershowtips">{{teachertips}}</div>
-    <div class="buttons" v-if="isbuttonokshow">
-      <div class="goback" @click="goback()">返回</div>
-      <div class="submit" @click="submit()">提交</div>
+     <!--默认显示返回 isbuttonokshow = true-->
+    <div class="buttons2" v-show="isbackbuttonokshow" >
+      <div class="gobackbuttons"  @click="goback()">
+        返回
+      </div>
     </div>
+
+
+    <!--条件符合时显示返回和提交 isbuttonokshow = false-->
+      <div class="buttons1" v-show="isbuttonokshow">
+        <div class="goback" @click="goback()" >返回</div>
+        <div class="submit" @click="submit()" >提交</div>
+      </div>
+
+
+    <!--提交时的加载动画 isbackbuttonokshow = false-->
+    <div class="buttons0" v-show="issubloadingshow">
+      <div class="submiting" ><mt-spinner type="triple-bounce" color="#26a2ff"></mt-spinner></div>
+    </div>
+
     <div class="datapicker">
       <mt-datetime-picker
         ref="picker0"
@@ -76,14 +92,15 @@
 
 <script>
   import Vue from 'vue'
-  import { DatetimePicker, Popup, Picker } from 'mint-ui'
+  import { DatetimePicker, Popup, Picker, Spinner } from 'mint-ui'
   import axios from 'axios'
   import bus from '@/components/bus.js'   // 事件总线
-  import { Loading } from 'element-ui'
+ // import { Loading } from 'element-ui'
   const qs = require('qs')
   Vue.component(Popup.name, Popup)
   Vue.component(Picker.name, Picker)
   Vue.component(DatetimePicker.name, DatetimePicker)
+  Vue.component(Spinner.name, Spinner)
 
   export default {
     name: 'shangkeqiandao',
@@ -92,7 +109,7 @@
         classname: '',
         stuclassname: '',
         classtime: '',
-        jcinfo: '请选择课时',
+        jcinfo: '',
         kcmc: '',
         actualnum: '', // 实际人数
         pickerdate: new Date(),
@@ -127,13 +144,19 @@
         isteachershowbjmc: false,
         isteachershowtips: false,
         teachertips: '请选择需要打分的班级',
-        isbuttonokshow: true,
+        isbuttonokshow: false,
+        isbackbuttonokshow: true,
         bjlist: [],
         studentbjdm: '',
         bjcount: 0,
         teacherbjdm: '',
         attendancenum: 0,
-        outstudentlist: []
+        outstudentlist: [],
+        iskcmclengthok: false,
+        iskeshiok: false,
+        issubloadingshow: false,
+        issubmitshow: true,
+        isinputdidable: false
       }
     },
     created: function () {
@@ -159,14 +182,38 @@
     methods: {
       onValuesChange (picker, values) {
         this.pickerkeshi = values[0]
+        if (this.instudentslist.length > 0) {
+          if (this.pickerkeshi !== undefined & this.pickerkeshi !== '') {
+            if (this.kcmc.length > 0 && this.kcmc.length <= 30) {
+              this.isbuttonokshow = true
+              this.isbackbuttonokshow = false
+            } else {
+              this.isbuttonokshow = false
+              this.isbackbuttonokshow = true
+              this.issubloadingshow = false
+            }
+          } else {
+            this.isbuttonokshow = false
+            this.isbackbuttonokshow = true
+            this.issubloadingshow = false
+          }
+        } else {
+          this.isbuttonokshow = false
+          this.isbackbuttonokshow = true
+          this.issubloadingshow = false
+        }
       },
       bjonValuesChange: function (picker, values) {
         this.classname = values[0]
         if (this.bjlist.length > 0) {
           for (var i = 0; i < this.bjlist.length; i++) {
             if (this.bjlist[i].bjmc === this.classname) {
-              this.teacherbjdm = this.bjlist[i].bjdm
-              this.getstudentlist(this.teacherbjdm)
+              if (this.bjlist[i].submited === true) {
+                this.teachertips = '此班级已经完成签到打分，无需操作'
+              } else {
+                this.teacherbjdm = this.bjlist[i].bjdm
+                this.getstudentlist(this.teacherbjdm)
+              }
             }
           }
         }
@@ -217,7 +264,7 @@
         window.history.back()
       },
       getstudentlist: function (value) {
-        let loadingInstance1 = Loading.service({fullscreen: true, customClass: 'loading'})
+      //  let loadingInstance1 = Loading.service({fullscreen: true, customClass: 'loading'})
         var that = this
         var url = '/sms-wx/assessController.do?classattendList'
         axios.post(url, qs.stringify({classCode: value})).then(function (data) {
@@ -239,8 +286,19 @@
                 }
                 console.log(that.instudentslist)
                 that.bjcount = that.instudentslist.length
-                that.isteachershowtips = false
-                loadingInstance1.close()
+               // loadingInstance1.close()
+                var usertype = window.localStorage.getItem('usertype')
+                if (usertype === '0') {
+                  that.isteachershowtips = false
+                } else {
+                  if (that.instudentslist.length > 0) {
+                    that.isteachershowtips = true
+                    that.teachertips = '点击左上班级名称即可切换班级'
+                  } else {
+                    that.isteachershowtips = true
+                    that.teachertips = '当前班级暂无学生,点击左上班级名称即可切换班级'
+                  }
+                }
                // that.classname = window.localStorage.getItem('selfinfo')
               }
             } else {
@@ -267,7 +325,7 @@
                   console.info(datamsg)
                   that.bjslots[0].values = []
                   for (var i = 0; i < datamsg.length; i++) {
-                    var bjlist = {bjmc: datamsg[i].bjmc, bjdm: datamsg[i].bjdm, teachername: datamsg[i].teachername}
+                    var bjlist = {bjmc: datamsg[i].bjmc, bjdm: datamsg[i].bjdm, teachername: datamsg[i].teachername, submited: false}
                     that.bjlist.push(bjlist)
                     that.bjslots[0].values.push(datamsg[i].bjmc)
                   }
@@ -279,6 +337,7 @@
       },
       pushstudentlist: function () {
         console.log('...')
+        this.outstudentlist = []
         var usertype = window.localStorage.getItem('usertype')
         // 获取已签到人数
         var nochecked = []
@@ -290,53 +349,55 @@
           }
         }
         console.log(nochecked)
-        this.attendancenum = nochecked.length
-       // alert(typeof usertype)
+        this.attendancenum = this.instudentslist.length - nochecked.length
+        var kcmc = this.kcmc
+        var classtime = this.classtime
+        var actualnum = this.bjcount
+        var attendancenum = this.attendancenum
+        var jcinfo = this.keshi
+        var bjmc
+        var bjdm
         if (usertype === '0') {
-          var kcmc = this.kcmc
-          var classtime = this.classtime
-          var actualnum = this.bjcount
-          var attendancenum = this.attendancenum
-          var jcinfo = this.keshi
-          var bjmc = this.stuclassname
-          var bjdm = this.studentbjdm
-          var classatend = [{
-            kcmc: kcmc,
-            classtime: classtime,
-            actualnum: actualnum,
-            attendancenum: attendancenum,
-            jcinfo: jcinfo,
-            bjmc: bjmc,
-            bjdm: bjdm
-          }]
-          var sli = this.instudentslist
-          for (var n = 0; n < sli.length; n++) {
-            var xh = sli[n].xh
-            var xm = sli[n].xm
-            var status = sli[n].ischecked
-            if (status === false) {
-              status = 'N'
-            } else if (status === true) {
-              status = 'Y'
-            }
-            var score = sli[n].fz
-            var remark = sli[n].reason
-            var studentlist = {xh: xh, xm: xm, status: status, score: score, remark: remark}
-            this.outstudentlist.push(studentlist)
-          }
-          var classatendDetail = this.outstudentlist
-          //  classatendDetail: classatendDetail
-          console.log(classatendDetail)
-          classatendDetail = JSON.stringify(classatendDetail)
-          classatend = JSON.stringify(classatend)
-          var dataall = {classatend: classatend, classatendDetail: classatendDetail}
-          console.log(dataall)
-          var dataout = qs.stringify(dataall)
-          console.log(dataout)
-          this.ajaxdata(dataout)
+          bjmc = this.stuclassname
+          bjdm = this.studentbjdm
         } else {
-          alert('teacher')
+          bjmc = this.classname
+          bjdm = this.teacherbjdm
         }
+        var classatend = [{
+          kcmc: kcmc,
+          classtime: classtime,
+          actualnum: actualnum,
+          attendancenum: attendancenum,
+          jcinfo: jcinfo,
+          bjmc: bjmc,
+          bjdm: bjdm
+        }]
+        var sli = this.instudentslist
+        for (var n = 0; n < sli.length; n++) {
+          var xh = sli[n].xh
+          var xm = sli[n].xm
+          var status = sli[n].ischecked
+          if (status === false) {
+            status = 'N'
+          } else if (status === true) {
+            status = 'Y'
+          }
+          var score = sli[n].fz
+          var remark = sli[n].reason
+          var studentlist = {xh: xh, xm: xm, status: status, score: score, remark: remark}
+          this.outstudentlist.push(studentlist)
+        }
+        var classatendDetail = this.outstudentlist
+        //  classatendDetail: classatendDetail
+        console.log(classatendDetail)
+        classatendDetail = JSON.stringify(classatendDetail)
+        classatend = JSON.stringify(classatend)
+        var dataall = {classatend: classatend, classatendDetail: classatendDetail}
+        console.log(dataall)
+        var dataout = qs.stringify(dataall)
+        console.log(dataout)
+        this.ajaxdata(dataout)
         this.classatend = []
       },
       submit: function () {
@@ -356,20 +417,73 @@
           this.studentbjdm = selinfo.bjdm
           this.isstudentshowbjmc = true
           this.isteachershowbjmc = false
+          this.isteachershowtips = false
           this.getstudentlist()
         } else {
           console.log('teacher')
           this.isstudentshowbjmc = false
           this.isteachershowbjmc = true
+          this.isteachershowtips = true
           this.instudentslist = []
           this.getteacherbjlist()
         }
       },
       ajaxdata: function (dataall) {
+        var usertype = window.localStorage.getItem('usertype')
+        var that = this
+        that.isbackbuttonokshow = false
+        that.isbuttonokshow = false
+        that.issubloadingshow = true
+        that.isinputdidable = 'disabled'
         var url = '/sms-wx/assessController.do?addclassattend'
         axios.post(url, dataall).then(function (data) {
           console.log(data)
+          setTimeout(function () {
+            that.issubloadingshow = false
+            that.isbuttonokshow = false
+            that.isbackbuttonokshow = true
+            that.isinputdidable = false
+            that.kcmc = ''
+            console.log(usertype)
+            if (usertype === '1') {
+              for (var i = 0; i < that.bjlist.length; i++) {
+                if (that.classname === that.bjlist[i].bjmc) {
+                  that.bjlist[i].submited = true
+                  that.instudentslist = []
+                  if (that.bjlist.length > 1) {
+                    that.teachertips = '打分成功!' + ' 点击左上角班级名称可切换班级'
+                  }
+                }
+              }
+            } else {
+              that.instudentslist = []
+              that.isteachershowtips = true
+              that.teachertips = '打分成功!'
+            }
+          }, 1000)
         })
+      },
+      showbackbutton: function () {
+        this.isbackbuttonokshow = true
+      },
+      islengthok: function () {
+        if (this.instudentslist.length > 0) {
+          if (this.kcmc.length > 0 && this.kcmc.length <= 30) {
+            this.iskcmclengthok = true
+            if (this.pickerkeshi !== '' && this.pickerkeshi !== undefined) {
+              this.isbuttonokshow = true
+              this.isbackbuttonokshow = false
+            }
+          } else {
+            this.isbuttonokshow = false
+            this.isbackbuttonokshow = true
+            this.issubloadingshow = false
+          }
+        } else {
+          this.isbuttonokshow = false
+          this.isbackbuttonokshow = true
+          this.issubloadingshow = false
+        }
       }
     },
     watch: {
@@ -380,6 +494,15 @@
       },
       pickerkeshi: function (newval) {
         this.keshi = newval
+      },
+      issubloadingshow: function (newval) {
+       // alert(newval)
+      },
+      isbackbuttonokshow: function (newval) {
+       // alert(newval)
+      },
+      isteachershowtips: function (newval) {
+       // alert(newval)
       }
     },
     components: {
@@ -408,28 +531,27 @@
     height:45px;
     background-color:#fff;
     position:relative;
-    font-size:14px;
+    font-size:15px;
     line-height: 45px;
   }
   .bjname{
-    height:45px;
-    width:calc(100% - 100px);
+    width:60%;
+    /*background-color:#00ff00;*/
     /*background-color:#1c8de0;*/
     float:left;
+    margin-left:10px;
   }
   .count{
-    height:45px;
-    width:calc(100px);
-    /*background-color:#00ff00;*/
-    float:right;
-    text-align: right;
+    width:calc(40% - 26px);
+    float:left;
+    /*background-color:#1c8de0;*/
+    margin-right:16px;
   }
   .bj{
     width:40px;
     height:45px;
     float: left;
     text-align: left;
-    padding-left: 15px;
     overflow:hidden;text-overflow:ellipsis;
   }
   .bjmc{
@@ -438,12 +560,13 @@
     float: left;
     text-align: left;
     overflow:hidden;text-overflow:ellipsis;
+    color:blue;
   }
   .zrs{
-    width:45px;
+    width:100%;
     height:45px;
-    float: left;
-    text-align: left;
+    text-align: right;
+
     overflow:hidden;text-overflow:ellipsis;
   }
   .bhzrs{
@@ -527,8 +650,13 @@
   .kcmcinput{
 
   }
+  .studentslist{
+    z-index: 9;
+    padding-bottom: 61px;
+  }
   .studentcard{
     width:90%;
+    height:auto;
     margin-top:10px;
     background-color:#fff;
     border:1px solid #d9dade;
@@ -539,6 +667,10 @@
     /*-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.1);*/
     margin-bottom:20px;
     font-weight:600;
+    transition: height 2s;
+    -moz-transition: all 2s; /* Firefox 4 */
+    -webkit-transition: all 2s; /* Safari 和 Chrome */
+    -o-transition: all 2s;
   }
   .cardchecked{
     border:1px solid #38adff;
@@ -610,7 +742,6 @@
     /*background-color:blue;*/
     position:relative;
   }
-
   .fzinput{
     height:26px;
     width:28px;
@@ -689,14 +820,65 @@
     border:0;
     /*background-color:red;*/
   }
-  .buttons{
+  .buttons0{
     width:100%;
     height:50px;
-    position: relative;
-    margin-bottom: 10px;
+    position: fixed;
+    /*margin-bottom: 10px;*/
+    bottom:0px;
     text-align: center;
     line-height:40px;
     font-size:16px;
+    z-index: 99;
+    background-color:#fff;
+    padding-top: 10px;
+    border-top:1px solid #eee;
+  }
+  .buttons1{
+    width:100%;
+    height:50px;
+    position: fixed;
+    /*margin-bottom: 10px;*/
+    bottom:0px;
+    text-align: center;
+    line-height:40px;
+    font-size:16px;
+    z-index: 99;
+    background-color:#fff;
+    padding-top: 10px;
+    border-top:1px solid #eee;
+  }
+  .buttons2{
+    width:100%;
+    height:50px;
+    position: fixed;
+    /*margin-bottom: 10px;*/
+    bottom:0px;
+    text-align: center;
+    line-height:40px;
+    font-size:16px;
+    z-index: 99;
+    background-color:#fff;
+    padding-top: 10px;
+    border-top:1px solid #eee;
+  }
+  .gobackbuttons{
+    height:40px;
+    background-color:#bbb;
+    width:90%;
+    line-height: 40px;
+    margin-left:5%;
+    border-radius: 8px;
+    color:#000;
+  }
+  .gobackbuttons:active{
+    height:40px;
+    background-color:#bbb;
+    width:90%;
+    line-height: 42px;
+    margin-left:5%;
+    border-radius: 8px;
+    color:#fff;
   }
   .goback{
     width:calc(40% );
@@ -740,14 +922,32 @@
   }
   .teachertips{
     width:100%;
-    height:100px;
-    line-height:100px;
+    height:40px;
+    line-height:40px;
     color:#999;
+    font-size:14px;
   }
   .selbjnput{
     border:0px;
     font-size:14px;
     line-height:45px;
+    width:100px;
+    float: left;
   }
+  .downarrow{
+    height:45px;
+    width:20px;
+    position:relative;
+    margin-top:0px;
+    margin-left:0px;
+    float: left;
+    line-height: 45px;
+    color:#999;
+    font-size: 12px;
+  }
+  .submiting{
+
+  }
+
 </style>
 
